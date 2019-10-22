@@ -1,4 +1,4 @@
 # Lazor Project
-# test of sublime
-# another test
-# test from the finder
+
+if __name__ == "__main__":
+	#start the program
