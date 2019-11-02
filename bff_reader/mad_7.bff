@@ -1,0 +1,47 @@
+# This is a comment
+# This example is for braid 5 in Lazor
+#   x = no block allowed
+#   o = blocks allowed
+#   A = fixed reflect block
+#   B = fixed opaque block
+#   C = fixed refract block
+
+# Grid will start at top left being 0, 0
+# Step size is by half blocks
+# Thus, this leads to even numbers indicating
+# the rows/columns between blocks, and odd numbers
+# intersecting blocks.
+
+GRID START
+o   o   o   o   o
+o   o   o   o   o
+o   o   o   o   x
+o   o   o   o   o
+o   o   o   o   o
+GRID STOP
+
+# Here we specify that we have 5 reflect blocks
+A 6
+
+# Now we specify that we have two lazers
+#    x, y, vx, vy
+# NOTE! because 0, 0 is the top left, our axis
+# are as follows:
+#
+#      .
+#     / \ -y
+#      |
+#      |
+#      |
+#      |_________\ +x
+#                /
+#
+L 2 1 1 1
+L 9 4 -1 1
+
+# Here we have the points that we need the lazers to intersect
+P 6 3
+P 6 5
+P 6 7
+P 2 9
+P 9 6

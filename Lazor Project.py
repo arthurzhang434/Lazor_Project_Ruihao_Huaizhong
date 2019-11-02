@@ -33,7 +33,7 @@ Type of variate: list of list
     B = fixed opaque block
     C = fixed refract block
 
-    [cx, cy, boxtype]
+    [(cx, cy), boxtype]
 
 2. Grid Point:
 
@@ -50,7 +50,7 @@ Type of variate: list of list
     B: terminate the ray
     C: pass and reflect
 
-    [gx, gy, ox, oy, gridtype]
+    [(gx, gy), (ox, oy), gridtype]
 
 3. Ray point:
 
@@ -59,7 +59,7 @@ Type of variate: list of list
     (1) position (rx, ry)
     (2) direction(vx, vy) 
 
-    [rx, ry, vx, vy] 
+    [(rx, ry), (vx, vy)] 
     (same format as the given input laser)
 
 4. Ray:
