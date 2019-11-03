@@ -73,7 +73,7 @@ def read_bff(filename):
     fi.close()
 
 '''
-convert the 
+convert the box to grid point with the type
 '''
 def convert_box(filename):
 
@@ -108,12 +108,12 @@ def convert_box(filename):
 
 if __name__ == "__main__":
     print(read_bff('numbered_6.bff'))
-    print('_____')
-    print(convert_box('numbered_6.bff'))
+    # print('_____')
+    # print(convert_box('numbered_6.bff'))
     # read_bff('dark_1.bff')
     # read_bff('mad_1.bff')
     # read_bff('mad_4.bff')
-    # read_bff('mad_7.bff')
+    # print(read_bff('mad_7.bff'))
     # read_bff('showstopper_4.bff')
-    # read_bff('tiny_5.bff')
+    # print(read_bff('tiny_5.bff'))
     # read_bff('yarn_5.bff')
