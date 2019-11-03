@@ -61,21 +61,59 @@ def read_bff(filename):
         elif line.startswith('P'):
             end_point.append((int(line[2]),int(line[4])))
 
-    print(box_raw)
-    print(box)
-    print(nA, nB, nC)
-    print(start_point)
-    print(end_point)
-    print('_____')
+    # print(box_raw)
+    # print(box)
+    # print(nA, nB, nC)
+    # print(start_point)
+    # print(end_point)
+    # print('_____')
+
+    return box
 
     fi.close()
 
+'''
+convert the 
+'''
+def convert_box(filename):
+
+# (2) orientation (ox, oy): 
+#     up (0, -1) / down (0,1) / left (-1, 0) / right (1, 0)
+
+#     (3) type: o/ A/ B/ C
+#     o: pass the point
+#     A: reflect
+#     B: terminate the ray
+#     C: pass and reflect
+
+#     [(gx, gy), (ox, oy), gridtype]
+
+
+    box = read_bff(filename)
+    grid_point = []
+    for b in box:
+        x, y = b[0]
+        gridtype = b[1]
+        u = [(x, y-1), (0, -1), gridtype]
+        d = [(x, y+1), (0, 1), gridtype]
+        l = [(x-1, y), (-1, 0), gridtype]
+        r = [(x+1, y), (1, 0), gridtype]
+        grid_point.append(u)
+        grid_point.append(l)
+        grid_point.append(d)
+        grid_point.append(r)
+
+    return grid_point    
+
+
 if __name__ == "__main__":
-    read_bff('numbered_6.bff')
-    read_bff('dark_1.bff')
-    read_bff('mad_1.bff')
-    read_bff('mad_4.bff')
-    read_bff('mad_7.bff')
-    read_bff('showstopper_4.bff')
-    read_bff('tiny_5.bff')
-    read_bff('yarn_5.bff')
+    print(read_bff('numbered_6.bff'))
+    print('_____')
+    print(convert_box('numbered_6.bff'))
+    # read_bff('dark_1.bff')
+    # read_bff('mad_1.bff')
+    # read_bff('mad_4.bff')
+    # read_bff('mad_7.bff')
+    # read_bff('showstopper_4.bff')
+    # read_bff('tiny_5.bff')
+    # read_bff('yarn_5.bff')
