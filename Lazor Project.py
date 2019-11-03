@@ -54,13 +54,37 @@ Type of variate: list of list
 
 3. Ray point:
 
-    ray_point[]
+    a for loop
+    1. put the original input point in the in_rpoint[]
 
-    (1) position (rx, ry)
+
+    incident ray point:
+    in_rpoint[]
+
+    (1) position (irx, iry)
     (2) direction(vx, vy) 
 
-    [(rx, ry), (vx, vy)] 
+    [(irx, iry), (vx, vy)] 
     (same format as the given input laser)
+
+    2. save the position of the input point in a list
+
+    passpoint [(gx,gy)] 
+
+
+    3. find all of the output point out_rpoint
+
+    out_rpoint[]
+    [(orx, ory), (vx, vy)]
+    convert to next incident ray point
+
+    next in_rpoint[]:
+    irx = orx + vx
+    iry = ory + vy
+
+    4. convert to next incident point in_rpoint[]
+    then start overt
+
 
 '''
     
