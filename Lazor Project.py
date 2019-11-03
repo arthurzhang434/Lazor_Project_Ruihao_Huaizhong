@@ -50,7 +50,7 @@ Type of variate: list of list
     B: terminate the ray
     C: pass and reflect
 
-    [(gx, gy), (ox, oy), gridtype]
+  
 
 3. Ray point:
 
@@ -62,20 +62,6 @@ Type of variate: list of list
     [(rx, ry), (vx, vy)] 
     (same format as the given input laser)
 
-4. Ray:
-
-    convert the ray point to a  straight line function 
-    for (x0, y0)
-    y - (vx * vy)* x = y0 - (vx * vy)* x0
-
-    y = k * x + b
-
-    k = vx * vy
-    b = y0 - vx * vy * x0
-
-    direction on x axis : vx
-
-    [k, b, vx]
 '''
     
 
