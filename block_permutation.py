@@ -21,7 +21,7 @@ def permutations(arr, begin = 0):
 # reference:permutations and remove the repeat variants
 #  https://blog.csdn.net/ggdhs/article/details/90285794
 
-def box_permu(import_box, nA = 11, nB = 0, nC = 0):
+def box_permu(import_box, nA = 6, nB = 0, nC = 0):
     obox = []
     for i in import_box:
         if i[1] == 'o':
@@ -29,6 +29,7 @@ def box_permu(import_box, nA = 11, nB = 0, nC = 0):
 
     no = len(obox) - nA - nB - nC
     box_unp, ol, Al, Bl, Cl = [], [], [], [], []
+
     if no:
         ol = ['o'] * no
     if nA:
@@ -47,7 +48,7 @@ def box_permu(import_box, nA = 11, nB = 0, nC = 0):
     # Some problem when trying to return the value, can only print 
 
 if __name__ == "__main__":
-    box = [[(1, 1), 'o'], [(3, 1), 'o'], [(5, 1), 'o'], [(1, 3), 'o'], [(3, 3), 'x'], [(5, 3), 'x'], [(1, 5), 'o'], [(3, 5), 'o'], [(5, 5), 'o'], [(1, 7), 'o'], [(3, 7), 'x'], [(5, 7), 'o'], [(1, 9), 'o'], [(3, 9), 'o'], [(5, 9), 'o']]
+    box = [[(1, 1), 'o'], [(3, 1), 'o'], [(5, 1), 'o'], [(7, 1), 'o'], [(9, 1), 'o'], [(1, 3), 'o'], [(3, 3), 'o'], [(5, 3), 'o'], [(7, 3), 'o'], [(9, 3), 'o'], [(1, 5), 'o'], [(3, 5), 'o'], [(5, 5), 'o'], [(7, 5), 'o'], [(9, 5), 'x'], [(1, 7), 'o'], [(3, 7), 'o'], [(5, 7), 'o'], [(7, 7), 'o'], [(9, 7), 'o'], [(1, 9), 'o'], [(3, 9), 'o'], [(5, 9), 'o'], [(7, 9), 'o'], [(9, 9), 'o']]
     # permutations(['o','o', 'A', 'A', 'A', 'B', 'B'])
     box_permu(box) 
 

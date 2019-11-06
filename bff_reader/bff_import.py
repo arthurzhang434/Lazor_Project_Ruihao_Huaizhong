@@ -107,7 +107,7 @@ def convert_box(filename):
 
 
 if __name__ == "__main__":
-    print(read_bff('numbered_6.bff'))
+    print(read_bff('mad_7.bff'))
     # print('_____')
     # print(convert_box('numbered_6.bff'))
     # read_bff('dark_1.bff')
