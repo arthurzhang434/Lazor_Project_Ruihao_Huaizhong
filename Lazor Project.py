@@ -62,7 +62,7 @@ Type of variate: list of list
     (1) position (irx, iry)
     (2) direction(vx, vy) 
 
-    [(irx, iry), (vx, vy)] 
+    [[irx, iry], [vx, vy] 
     (same format as the given input laser)
 
     2. save the position of the input point in a list
@@ -73,7 +73,7 @@ Type of variate: list of list
     3. find all of the output point out_rpoint
 
     out_rpoint[]
-    [(orx, ory), (vx, vy)]
+    [[orx, ory], [vx, vy]
     convert to next incident ray point
 
     next in_rpoint[]:
@@ -95,7 +95,7 @@ box_ori two dimensional list
 number of A, B, C: nA, nB, nC
 
 start point
-[(rx, ry), (vx, vy)] 
+[[rx, ry], [vx, vy)] 
 
 end point
 (x,y)
@@ -128,7 +128,7 @@ def read_bff(filename):
 
     for y in range(len(box_raw)):
         for x in range(len(box_raw[y])):
-            box.append([(2 * x + 1, 2 * y + 1), box_raw[y][x]])
+            box.append([[2 * x + 1, 2 * y + 1], box_raw[y][x]])
 
 # convert the start point, end point and number of boxes into lists
 
@@ -172,8 +172,8 @@ def convert_box(filename):
 #     A: reflect
 #     B: terminate the ray
 #     C: pass and reflect
-
-#     [(gx, gy), (ox, oy), gridtype]
+#     convert [[cx,cy], gridtype] to
+#     [[gx, gy], [ox, oy], gridtype]
 
 
     box = read_bff(filename)
@@ -181,28 +181,47 @@ def convert_box(filename):
     for b in box:
         x, y = b[0]
         gridtype = b[1]
-        u = [(x, y-1), (0, -1), gridtype]
-        d = [(x, y+1), (0, 1), gridtype]
-        l = [(x-1, y), (-1, 0), gridtype]
-        r = [(x+1, y), (1, 0), gridtype]
+        u = [[x, y-1], [0, -1], gridtype]
+        d = [[x, y+1], [0, 1], gridtype]
+        l = [[x-1, y], [-1, 0], gridtype]
+        r = [[x+1, y], [1, 0], gridtype]
         grid_point.append(u)
         grid_point.append(l)
         grid_point.append(d)
         grid_point.append(r)
 
-    return grid_point        
+    return grid_point
+
+def convert_grid(grid):
+#     convert [[gx, gy], [ox, oy], gridtype]  to
+#     [[cx,cy], gridtype]
+    if grid[1] == [-1, 0]:
+        return [[grid[0][0] + 1, grid[0][1]], grid[2]]
+    if grid[1] == [1, 0]:
+        return [[grid[0][0] - 1, grid[0][1]], grid[2]]
+    if grid[1] == [0, -1]:
+        return [[grid[0][0], grid[0][1] + 1], grid[2]]
+    if grid[1] == [0, 1]:
+        return [[grid[0][0], grid[0][1] - 1], grid[2]]
+
+def solve():
+	pass
+
+    # some trial on brute force to solve the maze is found to be impossible when
+    # the overall block exceed 12, so we need some strategy when we try to put the 
+    # ABC block on the availabe position on o.
+    # the order of assigning the position: refract, reflect, then the opaque
+
+    
+
+   
+
 
 if __name__ == "__main__":
-    print(read_bff('mad_7.bff'))
-
-
-
-
-
-
-
-
-
+    a = convert_box('mad_7.bff')
+    #print(a)
+    for i in range(len(a)):
+        print(convert_grid(a[i]))
 
 
 
