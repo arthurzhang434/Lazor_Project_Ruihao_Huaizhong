@@ -97,9 +97,8 @@ start point
 end point
 (x,y)
 
-
 '''
-def read_bff(filename):
+def read_bff(filename, select):
     fi = open(filename, 'r')
     bff = fi.read()
     line_split = bff.strip().split('\r\n')
@@ -157,13 +156,26 @@ def read_bff(filename):
     # print(box)
     # print('nA, nB, nC')
     # print(nA, nB, nC)
-    # print('start_point')
-    # print(start_point)
+    print('start_point')
+    print(start_point)
     # print('end_point')
     # print(end_point)
 
+    if select == 'br':
+        return box_raw
+    elif select == 'size':
+        return w, h  
+    elif select == 'box':
+        return box
+    elif select == 'nABC':
+        return nA, nB, nC
+    elif select == 'sp':
+        return start_point
+    elif select == 'ep':
+        return end_point
 
-    return box
+        
+        
 
     fi.close()
 
@@ -184,7 +196,7 @@ def convert_box(filename):
 #     [[gx, gy], [ox, oy], gridtype]
 
 
-    box = read_bff(filename)
+    box = read_bff(filename, 'box')
     grid_point = []
     for b in box:
         x, y = b[0]
@@ -221,13 +233,13 @@ def find_gp(point, filename):
     # grid point [[8, 9], [-1, 0], 'o']
     
     # change w, h
-    w = 5
-    h = 5
+    w, h = read_bff(filename, 'size')
 
     if point[0][0] < 0 or point[0][0] > 2 * w or point[0][1] < 0 or point[0][1] > 2 * h:
         print('error, out of range')
+        return None
     else:    
-        box = read_bff(filename)
+        box = read_bff(filename, 'box')
         grid = convert_box(filename)
         if point[0][0] % 2 == 0:
             face = [-point[1][0], 0]
@@ -239,24 +251,19 @@ def find_gp(point, filename):
                     gp = grid [i]
         return gp                
 
-
-
-def first_line(n):
+def first_line(n, filename): # also need to add start point
     # use the initial condition to find the boxes on the line
     # n can be 1 or 2 generate line for first or second line 
-    box = read_bff(filename)
+    box = read_bff(filename, 'box')
     start_point = [[(2, 1), (1, 1)], [(9, 4), (-1, 1)]]
-    ponline = start_point[n-1]
+    ponline = list(start_point[n-1])
     path = []
     while True:
         ponline
 
-
-    
+ 
     self.l_start_points[i][0][0] == self.l_start_points[i][0][0] + self.l_start_points[i][1][0]
     self.l_start_points[i][0][1] == self.l_start_points[i][0][1] + self.l_start_points[i][1][1]
-
-
     pass
 
 def solve(import_box, nA = 11, nB = 0, nC = 0):
@@ -285,15 +292,17 @@ def solve(import_box, nA = 11, nB = 0, nC = 0):
     if nC:
         Cl = ['C'] * nC          
     box_unp = ol + Al + Bl + Cl
-    
 '''
 
 
 if __name__ == "__main__":
-    # a = convert_box('mad_7.bff')
-    # print(a)
-    b = [(1, 2), (1, 1)]
-    print(find_gp(b, 'mad_7.bff'))
+    a = convert_box('mad_7.bff')
+    print(a)
+    # b = [(1, 2), (1, 1)]
+    # print(find_gp(b, 'mad_7.bff'))
+    # c = first_line(1, 'mad_7.bff')
+
+
     # for i in range(len(a)):
     #     print(convert_grid(a[i]))
 
