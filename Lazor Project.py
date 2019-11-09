@@ -1,6 +1,4 @@
 # Lazor Project
-
-
 '''
 1. arrange A B C into the empty O site to generate 
 a random distribution of the box.
@@ -48,7 +46,6 @@ Type of variate: list of list
     B: terminate the ray
     C: pass and reflect
 
-  
 
 3. Ray point:
 
@@ -148,12 +145,23 @@ def read_bff(filename):
         elif line.startswith('P'):
             end_point.append((int(line[2]),int(line[4])))
 
+    w = len(box_raw[0])
+    h = len(box_raw)        
+
+    
+    # print('box_raw')
     # print(box_raw)
+    # print('w,h')
+    # print(w,h)
+    # print('box')
     # print(box)
+    # print('nA, nB, nC')
     # print(nA, nB, nC)
+    # print('start_point')
     # print(start_point)
+    # print('end_point')
     # print(end_point)
-    # print('_____')
+
 
     return box
 
@@ -204,25 +212,88 @@ def convert_grid(grid):
     if grid[1] == [0, 1]:
         return [[grid[0][0], grid[0][1] - 1], grid[2]]
 
-def solve():
-	pass
+
+# given a incident ray, find the grid point that face to the ray (can reflect)
+
+def find_gp(point, filename):
+    # filename: in which picture
+    # point e.g. : [(2, 1), (1, 1)]
+    # grid point [[8, 9], [-1, 0], 'o']
+    
+    # change w, h
+    w = 5
+    h = 5
+
+    if point[0][0] < 0 or point[0][0] > 2 * w or point[0][1] < 0 or point[0][1] > 2 * h:
+        print('error, out of range')
+    else:    
+        box = read_bff(filename)
+        grid = convert_box(filename)
+        if point[0][0] % 2 == 0:
+            face = [-point[1][0], 0]
+        else:
+            face = [0, -point[1][1]]
+        for i in range(len(grid)):
+            if grid[i][0] == list(point[0]):
+                if grid[i][1] == face:
+                    gp = grid [i]
+        return gp                
+
+
+
+def first_line(n):
+    # use the initial condition to find the boxes on the line
+    # n can be 1 or 2 generate line for first or second line 
+    box = read_bff(filename)
+    start_point = [[(2, 1), (1, 1)], [(9, 4), (-1, 1)]]
+    ponline = start_point[n-1]
+    path = []
+    while True:
+        ponline
+
+
+    
+    self.l_start_points[i][0][0] == self.l_start_points[i][0][0] + self.l_start_points[i][1][0]
+    self.l_start_points[i][0][1] == self.l_start_points[i][0][1] + self.l_start_points[i][1][1]
+
+
+    pass
+
+def solve(import_box, nA = 11, nB = 0, nC = 0):
+    pass
 
     # some trial on brute force to solve the maze is found to be impossible when
     # the overall block exceed 12, so we need some strategy when we try to put the 
     # ABC block on the availabe position on o.
     # the order of assigning the position: refract, reflect, then the opaque
+    '''
+    import_box, nA = 6, nB = 0, nC = 0:
+    obox = []
+    for i in import_box:
+        if i[1] == 'o':
+            obox.append(i)
 
+    no = len(obox) - nA - nB - nC
+    box_unp, ol, Al, Bl, Cl = [], [], [], [], []
+
+    if no:
+        ol = ['o'] * no
+    if nA:
+        Al = ['A'] * nA
+    if nB:
+        Bl = ['B'] * nB
+    if nC:
+        Cl = ['C'] * nC          
+    box_unp = ol + Al + Bl + Cl
     
-
-   
+'''
 
 
 if __name__ == "__main__":
-    a = convert_box('mad_7.bff')
-    #print(a)
-    for i in range(len(a)):
-        print(convert_grid(a[i]))
-
-
-
+    # a = convert_box('mad_7.bff')
+    # print(a)
+    b = [(1, 2), (1, 1)]
+    print(find_gp(b, 'mad_7.bff'))
+    # for i in range(len(a)):
+    #     print(convert_grid(a[i]))
 
