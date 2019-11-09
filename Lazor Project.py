@@ -1,6 +1,4 @@
 # Lazor Project
-
-
 '''
 1. arrange A B C into the empty O site to generate 
 a random distribution of the box.
@@ -48,7 +46,6 @@ Type of variate: list of list
     B: terminate the ray
     C: pass and reflect
 
-  
 
 3. Ray point:
 
@@ -100,12 +97,11 @@ start point
 end point
 (x,y)
 
-
 '''
-def read_bff(filename):
+def read_bff(filename, select):
     fi = open(filename, 'r')
     bff = fi.read()
-    line_split = bff.strip().split('\r\n')
+    line_split = bff.strip().split('\n')
 
     box_raw = [] 
     box = []
@@ -143,19 +139,40 @@ def read_bff(filename):
         elif line.startswith('L'):
             s_p = line.strip().split(' ')
 
-            start_point.append([(int(s_p[1]),int(s_p[2]) ),((int(s_p[3])),int(s_p[4]))])
+            start_point.append([[int(s_p[1]),int(s_p[2])],[(int(s_p[3])),int(s_p[4])]])
 
         elif line.startswith('P'):
             end_point.append((int(line[2]),int(line[4])))
 
-    # print(box_raw)
-    # print(box)
-    # print(nA, nB, nC)
-    # print(start_point)
-    # print(end_point)
-    # print('_____')
+    w = len(box_raw[0])
+    h = len(box_raw)        
 
-    return box
+    
+    # print('box_raw')
+    # print(box_raw)
+    # print('w,h')
+    # print(w,h)
+    # print('box')
+    # print(box)
+    # print('nA, nB, nC')
+    # print(nA, nB, nC)
+    # print('start_point')
+    # print(start_point)
+    # print('end_point')
+    # print(end_point)
+
+    if select == 'br':
+        return box_raw
+    elif select == 'size':
+        return w, h  
+    elif select == 'box':
+        return box
+    elif select == 'nABC':
+        return nA, nB, nC
+    elif select == 'sp':
+        return start_point
+    elif select == 'ep':
+        return end_point
 
     fi.close()
 
@@ -176,7 +193,7 @@ def convert_box(filename):
 #     [[gx, gy], [ox, oy], gridtype]
 
 
-    box = read_bff(filename)
+    box = read_bff(filename, 'box')
     grid_point = []
     for b in box:
         x, y = b[0]
@@ -204,25 +221,96 @@ def convert_grid(grid):
     if grid[1] == [0, 1]:
         return [[grid[0][0], grid[0][1] - 1], grid[2]]
 
-def solve():
-	pass
+
+# given a incident ray, find the grid point that face to the ray (can reflect)
+
+def find_gp(filename, point):
+    # filename: in which picture
+    # point e.g. : [(2, 1), (1, 1)]
+    # grid point [[8, 9], [-1, 0], 'o']
+    
+    # change w, h
+    w, h = read_bff(filename, 'size')
+
+    if point[0][0] < 0 or point[0][0] > 2 * w  or point[0][1] < 0 or point[0][1] > 2 * h:
+        print('out of range')
+        return 'out'
+    else:    
+        box = read_bff(filename, 'box')
+        grid = convert_box(filename)
+        if point[0][0] % 2 == 0:
+            face = [-point[1][0], 0]
+        else:
+            face = [0, -point[1][1]]
+        gp =(0, 0, 0)
+        for i in range(len(grid)):
+            if grid[i][0] == list(point[0]):
+                if grid[i][1] == face:
+                    gp = grid [i]
+        return gp                
+
+def first_line(filename, n): # also need to add start point
+    # use the initial condition to find the boxes on the line
+    # n can be 1 or 2 generate line for first or second line 
+    box = read_bff(filename, 'box')
+    start_point = read_bff(filename, 'sp')
+    pline = start_point[n-1]
+    print (pline)
+    print(find_gp(filename, pline))
+    path = []
+    # for i in range(4):
+    while find_gp(filename, pline) != 'out': 
+        gp_line = find_gp(filename, pline)
+        if gp_line[2] == 'o':
+        	path.append(gp_line)
+        pline[0][0] = pline[0][0] + pline[1][0]
+        pline[0][1] = pline[0][1] + pline[1][1]
+    print(path)
+    blockpath = []
+    for i in path:
+    	blockpath.append(convert_grid(i))
+    return blockpath	
+
+
+def solve(import_box, nA = 11, nB = 0, nC = 0):
+    pass
 
     # some trial on brute force to solve the maze is found to be impossible when
     # the overall block exceed 12, so we need some strategy when we try to put the 
     # ABC block on the availabe position on o.
     # the order of assigning the position: refract, reflect, then the opaque
+    '''
+    import_box, nA = 6, nB = 0, nC = 0:
+    obox = []
+    for i in import_box:
+        if i[1] == 'o':
+            obox.append(i)
 
-    
+    no = len(obox) - nA - nB - nC
+    box_unp, ol, Al, Bl, Cl = [], [], [], [], []
 
-   
+    if no:
+        ol = ['o'] * no
+    if nA:
+        Al = ['A'] * nA
+    if nB:
+        Bl = ['B'] * nB
+    if nC:
+        Cl = ['C'] * nC          
+    box_unp = ol + Al + Bl + Cl
+'''
 
 
 if __name__ == "__main__":
-    a = convert_box('mad_7.bff')
-    #print(a)
-    for i in range(len(a)):
-        print(convert_grid(a[i]))
+    # a = convert_box('mad_7.bff')
+    # print(a)
+    # b = read_bff('mad_7.bff', 'sp')
+    # print(b)
+    # print(find_gp(b[1], 'mad_7.bff'))
+    print(first_line('mad_7.bff', 2))
+    # c = first_line(1, 'mad_7.bff')
+    # print(c)
 
 
-
-
+    # for i in range(len(a)):
+    #     print(convert_grid(a[i]))
