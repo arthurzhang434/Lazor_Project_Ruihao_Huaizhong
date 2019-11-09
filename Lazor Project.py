@@ -101,7 +101,7 @@ end point
 def read_bff(filename, select):
     fi = open(filename, 'r')
     bff = fi.read()
-    line_split = bff.strip().split('\r\n')
+    line_split = bff.strip().split('\n')
 
     box_raw = [] 
     box = []
@@ -139,7 +139,7 @@ def read_bff(filename, select):
         elif line.startswith('L'):
             s_p = line.strip().split(' ')
 
-            start_point.append([(int(s_p[1]),int(s_p[2]) ),((int(s_p[3])),int(s_p[4]))])
+            start_point.append([[int(s_p[1]),int(s_p[2])],[(int(s_p[3])),int(s_p[4])]])
 
         elif line.startswith('P'):
             end_point.append((int(line[2]),int(line[4])))
@@ -156,8 +156,8 @@ def read_bff(filename, select):
     # print(box)
     # print('nA, nB, nC')
     # print(nA, nB, nC)
-    print('start_point')
-    print(start_point)
+    # print('start_point')
+    # print(start_point)
     # print('end_point')
     # print(end_point)
 
@@ -173,9 +173,6 @@ def read_bff(filename, select):
         return start_point
     elif select == 'ep':
         return end_point
-
-        
-        
 
     fi.close()
 
@@ -227,7 +224,7 @@ def convert_grid(grid):
 
 # given a incident ray, find the grid point that face to the ray (can reflect)
 
-def find_gp(point, filename):
+def find_gp(filename, point):
     # filename: in which picture
     # point e.g. : [(2, 1), (1, 1)]
     # grid point [[8, 9], [-1, 0], 'o']
@@ -235,9 +232,9 @@ def find_gp(point, filename):
     # change w, h
     w, h = read_bff(filename, 'size')
 
-    if point[0][0] < 0 or point[0][0] > 2 * w or point[0][1] < 0 or point[0][1] > 2 * h:
-        print('error, out of range')
-        return None
+    if point[0][0] < 0 or point[0][0] > 2 * w  or point[0][1] < 0 or point[0][1] > 2 * h:
+        print('out of range')
+        return 'out'
     else:    
         box = read_bff(filename, 'box')
         grid = convert_box(filename)
@@ -245,26 +242,35 @@ def find_gp(point, filename):
             face = [-point[1][0], 0]
         else:
             face = [0, -point[1][1]]
+        gp =(0, 0, 0)
         for i in range(len(grid)):
             if grid[i][0] == list(point[0]):
                 if grid[i][1] == face:
                     gp = grid [i]
         return gp                
 
-def first_line(n, filename): # also need to add start point
+def first_line(filename, n): # also need to add start point
     # use the initial condition to find the boxes on the line
     # n can be 1 or 2 generate line for first or second line 
     box = read_bff(filename, 'box')
-    start_point = [[(2, 1), (1, 1)], [(9, 4), (-1, 1)]]
-    ponline = list(start_point[n-1])
+    start_point = read_bff(filename, 'sp')
+    pline = start_point[n-1]
+    print (pline)
+    print(find_gp(filename, pline))
     path = []
-    while True:
-        ponline
+    # for i in range(4):
+    while find_gp(filename, pline) != 'out': 
+        gp_line = find_gp(filename, pline)
+        if gp_line[2] == 'o':
+        	path.append(gp_line)
+        pline[0][0] = pline[0][0] + pline[1][0]
+        pline[0][1] = pline[0][1] + pline[1][1]
+    print(path)
+    blockpath = []
+    for i in path:
+    	blockpath.append(convert_grid(i))
+    return blockpath	
 
- 
-    self.l_start_points[i][0][0] == self.l_start_points[i][0][0] + self.l_start_points[i][1][0]
-    self.l_start_points[i][0][1] == self.l_start_points[i][0][1] + self.l_start_points[i][1][1]
-    pass
 
 def solve(import_box, nA = 11, nB = 0, nC = 0):
     pass
@@ -296,13 +302,15 @@ def solve(import_box, nA = 11, nB = 0, nC = 0):
 
 
 if __name__ == "__main__":
-    a = convert_box('mad_7.bff')
-    print(a)
-    # b = [(1, 2), (1, 1)]
-    # print(find_gp(b, 'mad_7.bff'))
+    # a = convert_box('mad_7.bff')
+    # print(a)
+    # b = read_bff('mad_7.bff', 'sp')
+    # print(b)
+    # print(find_gp(b[1], 'mad_7.bff'))
+    print(first_line('mad_7.bff', 2))
     # c = first_line(1, 'mad_7.bff')
+    # print(c)
 
 
     # for i in range(len(a)):
     #     print(convert_grid(a[i]))
-
