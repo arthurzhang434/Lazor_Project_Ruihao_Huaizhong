@@ -98,6 +98,8 @@ end point
 (x,y)
 
 '''
+import itertools
+
 def read_bff(filename, select):
     fi = open(filename, 'r')
     bff = fi.read()
@@ -147,7 +149,7 @@ def read_bff(filename, select):
     w = len(box_raw[0])
     h = len(box_raw)        
 
-    
+    # the command which been commented out are used for testing
     # print('box_raw')
     # print(box_raw)
     # print('w,h')
@@ -233,7 +235,6 @@ def find_gp(filename, point):
     w, h = read_bff(filename, 'size')
 
     if point[0][0] < 0 or point[0][0] > 2 * w  or point[0][1] < 0 or point[0][1] > 2 * h:
-        print('out of range')
         return 'out'
     else:    
         box = read_bff(filename, 'box')
@@ -255,8 +256,8 @@ def first_line(filename, n): # also need to add start point
     box = read_bff(filename, 'box')
     start_point = read_bff(filename, 'sp')
     pline = start_point[n-1]
-    print (pline)
-    print(find_gp(filename, pline))
+    # print (pline)
+    # print(find_gp(filename, pline))
     path = []
     # for i in range(4):
     while find_gp(filename, pline) != 'out': 
@@ -265,43 +266,83 @@ def first_line(filename, n): # also need to add start point
         	path.append(gp_line)
         pline[0][0] = pline[0][0] + pline[1][0]
         pline[0][1] = pline[0][1] + pline[1][1]
-    print(path)
     blockpath = []
     for i in path:
     	blockpath.append(convert_grid(i))
     return blockpath	
 
 
-def solve(import_box, nA = 11, nB = 0, nC = 0):
-    pass
+def solve(filename):
 
     # some trial on brute force to solve the maze is found to be impossible when
     # the overall block exceed 12, so we need some strategy when we try to put the 
     # ABC block on the availabe position on o.
-    # the order of assigning the position: refract, reflect, then the opaque
-    '''
-    import_box, nA = 6, nB = 0, nC = 0:
+    # the order of assigning the position: refract and reflect box (rbox), then the opaque
+
+    import_br = read_bff(filename, 'br')
+    import_box = read_bff(filename, 'box')
+    nA, nB, nC = read_bff(filename, 'nABC')
+
+    # print(nA, nB, nC)
+    
+
     obox = []
     for i in import_box:
         if i[1] == 'o':
             obox.append(i)
 
-    no = len(obox) - nA - nB - nC
-    box_unp, ol, Al, Bl, Cl = [], [], [], [], []
+    Al, Bl, Cl = [], [], []
 
-    if no:
-        ol = ['o'] * no
     if nA:
         Al = ['A'] * nA
     if nB:
         Bl = ['B'] * nB
     if nC:
-        Cl = ['C'] * nC          
-    box_unp = ol + Al + Bl + Cl
-'''
+        Cl = ['C'] * nC
+    rbox_raw = Al + Cl
+
+
+    solved = False
+
+
+    if nA + nC == 0:
+        solved = True
+        print('dark')
+
+    else:
+
+        rbox_tuple = list(set(itertools.permutations(''.join(rbox_raw))))
+        rbox = []
+        for i in rbox_tuple:
+            rbox.append(list(i))
+
+        print(rbox) # rbox: permutation fo all the reflect/refract box
+        # print(obox)
+        nline = len(read_bff(filename, 'sp'))
+
+        line1 = first_line(filename, 1)
+        if len(read_bff(filename, 'sp')) == 2:
+            line2 = first_line(filename, 2)
+
+    while solved == False:
+    	for f1 in line1[:]:
+
+    		print(f1)
+
+
+    		for br in rbox:
+    			pass
+
+    
+ 
+
+
+
+
 
 
 if __name__ == "__main__":
+    #solve('mad_7.bff')
     # a = convert_box('mad_7.bff')
     # print(a)
     # b = read_bff('mad_7.bff', 'sp')
