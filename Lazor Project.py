@@ -99,6 +99,7 @@ end point
 
 '''
 import itertools
+from copy import deepcopy
 
 def read_bff(filename, select):
     fi = open(filename, 'r')
@@ -263,13 +264,13 @@ def first_line(filename, n): # also need to add start point
     while find_gp(filename, pline) != 'out': 
         gp_line = find_gp(filename, pline)
         if gp_line[2] == 'o':
-        	path.append(gp_line)
+            path.append(gp_line)
         pline[0][0] = pline[0][0] + pline[1][0]
         pline[0][1] = pline[0][1] + pline[1][1]
     blockpath = []
     for i in path:
-    	blockpath.append(convert_grid(i))
-    return blockpath	
+        blockpath.append(convert_grid(i))
+    return blockpath    
 
 
 def solve(filename):
@@ -277,7 +278,7 @@ def solve(filename):
     # some trial on brute force to solve the maze is found to be impossible when
     # the overall block exceed 12, so we need some strategy when we try to put the 
     # ABC block on the availabe position on o.
-    # the order of assigning the position: refract and reflect box (rbox), then the opaque
+    # the order of assigning the position: refract and reflect box (refl), then the opaque
 
     import_br = read_bff(filename, 'br')
     import_box = read_bff(filename, 'box')
@@ -301,22 +302,27 @@ def solve(filename):
         Cl = ['C'] * nC
     rbox_raw = Al + Cl
 
-
     solved = False
 
 
     if nA + nC == 0:
         solved = True
-        print('dark')
+        print('dark')        
+        # directly pass
+
+        # save the following variables:
+        # rest block
+        # obox rest
+        # solved grid
 
     else:
 
         rbox_tuple = list(set(itertools.permutations(''.join(rbox_raw))))
-        rbox = []
+        refl = []
         for i in rbox_tuple:
-            rbox.append(list(i))
+            refl.append(list(i))
 
-        print(rbox) # rbox: permutation fo all the reflect/refract box
+        print(refl) # refl: permutation fo all the reflect/refract box
         # print(obox)
         nline = len(read_bff(filename, 'sp'))
 
@@ -324,17 +330,58 @@ def solve(filename):
         if len(read_bff(filename, 'sp')) == 2:
             line2 = first_line(filename, 2)
 
-    while solved == False:
-    	for f1 in line1[:]:
-
-    		print(f1)
-
-
-    		for br in rbox:
-    			pass
-
     
+    if len(read_bff(filename, 'sp')) == 1:
+        while solved == False:
+            for f1 in line1:
+                print(f1)
+                # [[1,3],'o']
+                for br in refl:
+                    # select on and put in(save the box)
+                    # update refl (delete the box which put inside)
+                    # change the box
+                    # combination
 
+                    # put the other boxes in
+                    for box_op in range(len(obox)):
+                        # record the used box
+                        # update the grid
+
+                        #print the grid
+                        for box1 in range(len(refl)):
+                            # record the grid
+
+
+
+
+
+    elif len(read_bff(filename, 'sp')) == 2:
+        while solved == False:
+            for f1 in line1:
+                print(f1)
+                # [[1,3],'o']
+                for br1 in refl:
+                    # select on and put in(save the box)
+                    # update refl(delete the box which put inside)
+                    # change the box
+                    # combination
+                    for f2 in line2:
+                        print(f2)
+                        # [[1,3],'o']
+                        for br2 in refl:
+                            # select on and put in(save the box)
+                            # update refl(delete the box which put inside)
+                            # change the box
+                            # combination
+
+                            # put the other boxes in
+                            for box_op in range(len(obox)):
+                                # record the used box
+                                # update the grid
+
+                                #print the grid
+                                for box1 in range(len(refl)):
+                                    # record the grid
 
 if __name__ == "__main__":
     #solve('mad_7.bff')
@@ -343,7 +390,7 @@ if __name__ == "__main__":
     # b = read_bff('mad_7.bff', 'sp')
     # print(b)
     # print(find_gp(b[1], 'mad_7.bff'))
-    print(first_line('mad_7.bff', 1))
+    # print(first_line('mad_7.bff', 1))
     # c = first_line(1, 'mad_7.bff')
     # print(c)
 
