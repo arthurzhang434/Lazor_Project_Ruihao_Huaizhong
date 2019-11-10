@@ -322,7 +322,8 @@ def solve(filename):
         for i in rbox_tuple:
             refl.append(list(i))
 
-        print(refl) # refl: permutation fo all the reflect/refract box
+        print(refl) # refl: permutation of all the reflect/refract box
+        # [['A', 'A', 'C'], ['A', 'C', 'A']]
         # print(obox)
         nline = len(read_bff(filename, 'sp'))
 
@@ -333,66 +334,80 @@ def solve(filename):
     
     if len(read_bff(filename, 'sp')) == 1:
         while solved == False:
-            for f1 in line1:
+            for f1 in line1: # select a box in the first line
                 print(f1)
                 # [[1,3],'o']
-                for br in refl:
+                for br in refl: # select an order of A C arrangement
                     # select on and put in(save the box)
+
                     # update refl (delete the box which put inside)
                     # change the box
                     # combination
+                    grid_1 = deepcopy(import_box)
+                    # this part use a for loop to find the same box, can be upgraded
+                    for i in range(len(grid_1)):
+                        if grid_1[i][0] == f1[0]:
+                            grid_1[i][1]= br[-1]
+                    boxoption = deepcopy(import_box)
+                    boxoption.remove(f1)
+                    boxoption = list(itertools.combination(boxoption, len(br)-1))       
 
                     # put the other boxes in
-                    for box_op in range(len(obox)):
+                    for box_op in range(len(boxoption)):
+                        pass
                         # record the used box
                         # update the grid
 
                         #print the grid
                         for box1 in range(len(refl)):
+                            pass
                             # record the grid
 
 
 
 
 
-    elif len(read_bff(filename, 'sp')) == 2:
-        while solved == False:
-            for f1 in line1:
-                print(f1)
-                # [[1,3],'o']
-                for br1 in refl:
-                    # select on and put in(save the box)
-                    # update refl(delete the box which put inside)
-                    # change the box
-                    # combination
-                    for f2 in line2:
-                        print(f2)
-                        # [[1,3],'o']
-                        for br2 in refl:
-                            # select on and put in(save the box)
-                            # update refl(delete the box which put inside)
-                            # change the box
-                            # combination
+    # elif len(read_bff(filename, 'sp')) == 2:
+    #     while solved == False:
+    #         for f1 in line1:
+    #             print(f1)
+    #             # [[1,3],'o']
+    #             for br1 in refl:
+    #                 # select on and put in(save the box)
+    #                 # update refl(delete the box which put inside)
+    #                 # change the box
+    #                 # combination
+    #                 # update line2 in case two line cross
+    #                 for f2 in line2:
+    #                     print(f2)
+    #                     # [[1,3],'o']
+    #                     for br2 in refl:
+    #                         # select on and put in(save the box)
+    #                         # update refl(delete the box which put inside)
+    #                         # change the box
+    #                         # combination
 
-                            # put the other boxes in
-                            for box_op in range(len(obox)):
-                                # record the used box
-                                # update the grid
+    #                         # put the other boxes in
+    #                         for box_op in range(len(obox)):
+    #                             # record the used box
+    #                             # update the grid
 
-                                #print the grid
-                                for box1 in range(len(refl)):
-                                    # record the grid
+    #                             #print the grid
+    #                             for box1 in range(len(refl)):
+    #                                 # record the grid
 
 if __name__ == "__main__":
-    #solve('mad_7.bff')
+    # solve('mad_7.bff')
     # a = convert_box('mad_7.bff')
     # print(a)
-    # b = read_bff('mad_7.bff', 'sp')
+    # b = read_bff('mad_7.bff', 'box')
     # print(b)
     # print(find_gp(b[1], 'mad_7.bff'))
     # print(first_line('mad_7.bff', 1))
     # c = first_line(1, 'mad_7.bff')
     # print(c)
+    a= [1,2,3,4,5]
+    print(a[-1])
 
 
     # for i in range(len(a)):
