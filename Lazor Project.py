@@ -347,25 +347,28 @@ def solve(filename):
                     # this part use a for loop to find the same box, can be upgraded
                     for i in range(len(grid_1)):
                         if grid_1[i][0] == f1[0]:
-                            grid_1[i][1]= br[-1]
-                    boxoption = deepcopy(import_box)
+                            grid_1[i][1] = br[0]
+                    boxoption = deepcopy(obox)
                     boxoption.remove(f1)
                     boxoption = list(itertools.combination(boxoption, len(br)-1))       
 
                     # put the other boxes in
-                    for box_op in range(len(boxoption)):
-                        pass
+                    for box_op in range(len(boxoption)): # select an order of combination
+                        usedbox = [br[0]]
+                        grid_2 = deepcopy(grid_1) # copy the grid with the first box put in
                         # record the used box
                         # update the grid
 
-                        #print the grid
-                        for box1 in range(len(refl)):
-                            pass
+                        # print the grid
+                        for box1 in range(len(refl)-1):
+                            for i in range(len(grid_2)):
+                                if grid_2[i][0] == boxoption[box_op][box1][0]:
+                                    grid_2[1] = refl[box1+1]
+                                usedbox.append(refl[box1+1])
+                                
+                                # update the grid 
+                            # check whether all the point demanded have light passed through
                             # record the grid
-
-
-
-
 
     # elif len(read_bff(filename, 'sp')) == 2:
     #     while solved == False:
@@ -395,6 +398,18 @@ def solve(filename):
     #                             #print the grid
     #                             for box1 in range(len(refl)):
     #                                 # record the grid
+    # for B in box_left:
+    #     copy the grid solved
+    #     assign B box
+    #     testing
+
+
+
+    #     grid_solved_final
+
+
+    #     then final output
+
 
 if __name__ == "__main__":
     # solve('mad_7.bff')
