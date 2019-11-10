@@ -47,7 +47,10 @@ class Block():
         return self.new_l1, self.new_l2
         
     def opaque(self):
-        return None
+        self.l_start_point[1][0] = 0
+        self.l_start_point[1][1] = 0
+        self.new_l1 = self.l_start_point
+        return self.new_l1
 #Block(alist,blist)       
     
 #def find_gp(filename, point):
@@ -92,6 +95,7 @@ def update_laser(grid_points, l_start_points):
             new_l1[0][0] = new_l1[0][0] + new_l1[1][0]
             new_l1[0][1] = new_l1[0][1] + new_l1[1][1]            
             laser_out_points.append(new_l1)
+            
         if len(new_l2) != 0:
             new_l2[0][0] = new_l2[0][0] + new_l2[1][0]
             new_l2[0][1] = new_l2[0][1] + new_l2[1][1]
