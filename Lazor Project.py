@@ -233,22 +233,22 @@ def find_gp(filename, point):
     
     # change w, h
     w, h = read_bff(filename, 'size')
+    gp = []
 
-    if point[0][0] < 0 or point[0][0] > 2 * w  or point[0][1] < 0 or point[0][1] > 2 * h:
-        return 'out'
-    else:    
+    if point[0][0] > 0 and point[0][0] < 2*w and point[0][1] > 0 and point[0][1] < 2*h:
         box = read_bff(filename, 'box')
         grid = convert_box(filename)
         if point[0][0] % 2 == 0:
             face = [-point[1][0], 0]
-        else:
+        if point[0][0] % 2 != 0:
             face = [0, -point[1][1]]
-        gp =(0, 0, 0)
         for i in range(len(grid)):
-            if grid[i][0] == list(point[0]):
-                if grid[i][1] == face:
-                    gp = grid [i]
-        return gp                
+            if grid[i][0] == point[0] and grid[i][1] == face:
+                gp = grid[i]
+                break
+        return gp
+    else:
+        return 'out'
 
 def first_line(filename, n): # also need to add start point
     # use the initial condition to find the boxes on the line
@@ -334,11 +334,6 @@ def solve(filename):
     			pass
 
     
- 
-
-
-
-
 
 
 if __name__ == "__main__":
@@ -348,7 +343,7 @@ if __name__ == "__main__":
     # b = read_bff('mad_7.bff', 'sp')
     # print(b)
     # print(find_gp(b[1], 'mad_7.bff'))
-    print(first_line('mad_7.bff', 2))
+    print(first_line('mad_7.bff', 1))
     # c = first_line(1, 'mad_7.bff')
     # print(c)
 

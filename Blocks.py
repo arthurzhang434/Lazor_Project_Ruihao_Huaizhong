@@ -101,33 +101,3 @@ def update_laser(grid_points, l_start_points):
     
 print(update_laser(grid_points, l_start_points))
         
-    
-
-        
-            
-            
-
-        
-                    
-        
-        
-        
-        
-
-                            
-                            
-                                
-                            
-                            
-                        
-                    
-                
-
-                        
-                    
-        
-
-    
-
-
-        
