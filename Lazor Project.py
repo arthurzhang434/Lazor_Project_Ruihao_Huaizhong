@@ -332,10 +332,49 @@ def find_gp(grid, point, filename):
             if grid[i][0] == point[0] and grid[i][1] == face:
                 gp = grid[i]
                 break
+        return gp    
+    
+    if point[0][0] == 0 and point[1][0] == 1: 
+        face = [-point[1][0], 0]
+        for i in range(len(grid)):
+            if grid[i][0] == point[0] and grid[i][1] == face:
+                gp = grid[i]
+                break
         return gp
-    if point[0][0] == 0 or point[0][0] == 2*w or point[0][1] == 0 or point[0][1] == 2*h:
+    if point[0][0] == 2*w and point[1][0] == -1:
+        face = [-point[1][0], 0]
+        for i in range(len(grid)):
+            if grid[i][0] == point[0] and grid[i][1] == face:
+                gp = grid[i]
+                break
+        return gp       
+    if point[0][1] == 0 and point[1][1] == 1:
+        face = [0, -point[1][1]]
+        for i in range(len(grid)):
+            if grid[i][0] == point[0] and grid[i][1] == face:
+                gp = grid[i]
+                break
+        return gp
+    if point[0][1] == 2*h and point[1][1] == -1:
+        face = [0, -point[1][1]]
+        for i in range(len(grid)):
+            if grid[i][0] == point[0] and grid[i][1] == face:
+                gp = grid[i]
+                break        
+        return gp
+            
+    if point[0][0] == 0 and point[1][0] == -1: 
         gp = [[],[],'B']
         return gp
+    if point[0][0] == 2*w and point[1][0] == 1:
+        gp = [[],[],'B']
+        return gp        
+    if point[0][1] == 0 and point[1][1] == -1:
+        gp = [[],[],'B']
+        return gp  
+    if point[0][1] == 2*h and point[1][1] == 1:
+        gp = [[],[],'B']
+        return gp  
     
  
 #print(find_gp(grid_points,l_start_points))
