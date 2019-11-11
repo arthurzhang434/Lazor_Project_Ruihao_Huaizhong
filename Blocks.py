@@ -142,20 +142,34 @@ def update_laser(grid_points, l_start_points):
             
     return(laser_out_points)
     
-def test_solution(grid_points, l_start_points):
+def test_solution(grid_points, l_start_points, end_points):
     laser_path_point = []
+    laser_path_point1 = []
+    same_xy = 0
 
     while len(l_start_points) > 0:
-        laser_path_point = laser_path_point + l_start_points
-        print(laser_path_point)
+        laser_path_point = laser_path_point + deepcopy(l_start_points)
+        #print(laser_path_point)
         l_start_points = update_laser(grid_points, l_start_points)
-        print(l_start_points)
+        #print(l_start_points)
+    
+    for i in range(len(laser_path_point)):
+        #print(laser_path_point[i][0])
+        laser_path_point1 = laser_path_point1 + [laser_path_point[i][0]]
         
+    for j in range(len(end_points)):
+        for k in range(len(laser_path_point1)):
+            if end_points[j] == laser_path_point1[k]:
+                same_xy = same_xy + 1
+    #print(same_xy)
+    if len(end_points) == same_xy:
+        return True
+    if len(end_points) != same_xy:
+        return False
             
-    return laser_path_point
 
-print(test_solution(grid_points,l_start_points))
-#print(update_laser(grid_points, l_start_points))
+print(test_solution(grid_points,l_start_points, end_points))
+
 
             
 
