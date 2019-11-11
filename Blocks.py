@@ -122,7 +122,7 @@ def test_solution(grid_points, l_start_points, end_points):
     for i in range(len(laser_path_point)):
         #print(laser_path_point[i][0])
         laser_path_point1 = laser_path_point1 + [laser_path_point[i][0]]
-        
+    
     for j in range(len(end_points)):
         for k in range(len(laser_path_point1)):
             if end_points[j] == laser_path_point1[k]:
@@ -132,7 +132,7 @@ def test_solution(grid_points, l_start_points, end_points):
         return True
     if len(end_points) != same_xy:
         return False
-            
+
 
 
 if __name__ == "__main__":

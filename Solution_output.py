@@ -8,13 +8,15 @@ Created on Sun Nov 10 10:57:01 2019
 '''
 This file contains the function to visualize the output of the solution
 '''
-from PIL import Image
+from PIL import Image, ImageDraw
 
 solution = [['o','o','C','o'],
        ['o','o','o','A'],
        ['A','o','o','o'],
        ['o','o','o','o']
        ] 
+
+blocks = [[3,0],[4,1],[5,2],[6,3],[5,4],[4,5],[3,6],[2,7],[4,3],[3,4],[2,5],[3,6],[4,7],[5,8]]
 
 colors ={'o':(255,255,255),
          'x':(0,0,0),
@@ -42,6 +44,13 @@ def solution_output(solution, dim=20, gap=2):
     for y1, y2 in enumerate(solution):
         for x1, x2 in enumerate(y2):
             set_colors(img, x1, y1, dim, gap, colors[x2])
+            
+    draw = ImageDraw.Draw(img)
+    
+    for y11, y22 in enmuerate(blocks):
+        for x11, x22 in enmuerate(y22):
+            draw.line((()))
+            
             
     img.save('Solution.png')
         
