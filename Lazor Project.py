@@ -448,7 +448,7 @@ def solve(filename):
 
         line1 = first_line(filename, 1)
         
-        if len(read_bff(filename, 'sp')) == 1:
+        if len(read_bff(filename, 'sp')) == 1 :
             if solved == False:#while
                 for f1 in line1: # select a box in the first line
                     # print('f1')
@@ -462,8 +462,6 @@ def solve(filename):
                         # combination
                         grid_1 = deepcopy(import_box)
                         
-
-
                         # this part use a for loop to find the same box, can be upgraded
                         for i in range(len(grid_1)):
                             if grid_1[i][0] == f1[0]:
@@ -585,17 +583,21 @@ def solve(filename):
                                     usedbox.append(br[box1+1])
                                     # print('used box')
                                     # print(usedbox)
-                                    # print('i')
-                                    # print(i)
+
                                     # print('grid_2')
                                     # print(grid_2)
 
                                     l_start_points = read_bff(filename, 'sp')
                                     end_points = read_bff(filename, 'ep')
+                                    gridpoints_2 = convert_box(grid_2)
 
-                                    if (test_solution(grid_2,l_start_points, end_points, filename)):
+
+                                    if (test_solution(gridpoints_2,l_start_points, end_points, filename)):
                                         solved = True
                                         print(grid_2)
+    # if there are B block left, put the inside
+
+
     # for B in box_left:
     #     copy the grid solved
     #     assign B box
@@ -610,7 +612,7 @@ def solve(filename):
 
 
 if __name__ == "__main__":
-    solve('mad_4.bff')
+    solve('tiny_5.bff')
     # a = convert_box('mad_7_test.bff')
     # print(a)
     # ep = read_bff('mad_7.bff', 'ep')
