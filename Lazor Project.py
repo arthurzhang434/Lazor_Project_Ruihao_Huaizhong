@@ -458,9 +458,11 @@ def solve(filename):
 
         line1 = first_line(filename, 1)
         
-        if len(read_bff(filename, 'sp')) == 1 :
+        if len(read_bff(filename, 'sp')) == 1 or len(read_bff(filename, 'sp')) == 2:
             if solved == False:#while
                 for f1 in line1: # select a box in the first line
+                    if solved == True:
+                        break
                     # print('f1')
                     # print(f1)
                     # [[1,3],'o']
@@ -471,6 +473,8 @@ def solve(filename):
                         # change the box
                         # combination
                         grid_1 = deepcopy(import_box)
+                        if solved == True:
+                            break
                         
                         # this part use a for loop to find the same box, can be upgraded
                         for i in range(len(grid_1)):
@@ -486,6 +490,8 @@ def solve(filename):
                         # print(boxoption)
                         # put the other boxes in
                         for box_op in range(len(boxoption)): # select an order of combination
+                            if solved == True:
+                                break
                             usedbox = [br[0]]
                             grid_2 = deepcopy(grid_1) # copy the grid with the first box put in
                             # record the used box
@@ -517,6 +523,7 @@ def solve(filename):
                                 if (test_solution(gridpoints_2,l_start_points, end_points, filename)):
                                     solved = True
                                     print(grid_2)
+                                    break
 
 
 
@@ -524,7 +531,7 @@ def solve(filename):
                                 # check whether all the point demanded have light passed through
                                 # record the grid
 
-        if len(read_bff(filename, 'sp')) == 2:
+        elif len(read_bff(filename, 'sp')) == 2:
             line2 = first_line(filename, 2)
             while solved == False:#while
                 for br in refl: # select an order of A C arrangement
@@ -622,7 +629,7 @@ def solve(filename):
 
 
 if __name__ == "__main__":
-    solve('mad_1.bff')
+    solve('mad_4.bff')
     # a = convert_box('mad_7_test.bff')
     # print(a)
     # ep = read_bff('mad_7.bff', 'ep')
