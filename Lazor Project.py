@@ -650,7 +650,7 @@ def solve(filename):
 
 
 if __name__ == "__main__":
-    solve('showstopper_4.bff')
+    # solve('showstopper_4.bff')
     # a = convert_box('mad_7_test.bff')
     # print(a)
     # ep = read_bff('mad_7.bff', 'ep')
@@ -658,7 +658,7 @@ if __name__ == "__main__":
     # b = read_bff('mad_7.bff', 'box')
     # print(b)
     # print(find_gp1(b[1], 'mad_7.bff'))
-    # print(first_line('showstopper_4.bff', 1))
+    print(first_line('showstopper_4.bff', 1))
     # c = first_line('mad_7.bff', 1)
     # print(c)
     
