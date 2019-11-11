@@ -102,7 +102,7 @@ from copy import deepcopy
 def read_bff(filename, select):
     fi = open(filename, 'r')
     bff = fi.read()
-    line_split = bff.strip().split('\r\n')
+    line_split = bff.strip().split('\n')
 
     box_raw = [] 
     box = []
@@ -480,7 +480,7 @@ def solve(filename):
         print('dark')        
         # directly pass
         boxop_left = obox
-        
+        grid_s1 = import_box
         box_left = Bl
 
         # save the following variables:
@@ -556,11 +556,8 @@ def solve(filename):
                                 usedbox.append(br[box1+1])
                                 # print('used box')
                                 # print(usedbox)
-                                # print('i')
-                                # print(i)
                                 # print('grid_2')
                                 # print(grid_2)
-
                                 l_start_points = read_bff(filename, 'sp')
                                 end_points = read_bff(filename, 'ep')
                                 gridpoints_2 = convert_box(grid_2)
@@ -582,7 +579,7 @@ def solve(filename):
                                     # print(brleft)
                                     box_left = Bl + brleft
                                     print(box_left)
-                                    
+                                    grid_s1 = grid_2
 
                                     break
 
@@ -675,7 +672,16 @@ def solve(filename):
     # if there are B block left, put the inside
 
 
-    # for B in box_left:
+    for box_op1 in range(len(boxop_left)):
+        
+        grid_3 = deepcopy(grid_s1)
+        for box4 in range(box_left):
+            for i in range(len(grid_s1)):
+                if grid_s1[i][0] == boxop_left[box_op1][box4]:
+                    grid_s1[i][1]= 
+
+            
+
     #     copy the grid solved
     #     assign B box
     #     testing
@@ -689,7 +695,7 @@ def solve(filename):
 
 
 if __name__ == "__main__":
-    # solve('showstopper_4.bff')
+    solve('dark_1.bff')
     # a = convert_box('mad_7_test.bff')
     # print(a)
     # ep = read_bff('mad_7.bff', 'ep')
@@ -697,7 +703,7 @@ if __name__ == "__main__":
     # b = read_bff('mad_7.bff', 'box')
     # print(b)
     # print(find_gp1(b[1], 'mad_7.bff'))
-    print(first_line('showstopper_4.bff', 1))
+    # print(first_line('showstopper_4.bff', 1))
     # c = first_line('mad_7.bff', 1)
     # print(c)
     
