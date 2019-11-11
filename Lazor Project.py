@@ -354,6 +354,7 @@ def update_laser(grid_points, l_start_points, filename):
             new_l1[0][0] = new_l1[0][0] + new_l1[1][0]
             new_l1[0][1] = new_l1[0][1] + new_l1[1][1]            
             laser_out_points.append(new_l1)
+            
                 
         if len(new_l2) != 0 and new_l2[1][0] != 0:
             new_l2[0][0] = new_l2[0][0] + new_l2[1][0]
@@ -394,6 +395,8 @@ def test_solution(grid_points, l_start_points, end_points, filename):
                 same_xy = same_xy + 1
     #print(same_xy)
     if len(end_points) == same_xy:
+        print(laser_path_point1)
+        print(laser_path_point2)
         return True
     if len(end_points) != same_xy:
         return False
