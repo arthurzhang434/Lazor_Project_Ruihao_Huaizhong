@@ -102,7 +102,7 @@ from copy import deepcopy
 def read_bff(filename, select):
     fi = open(filename, 'r')
     bff = fi.read()
-    line_split = bff.strip().split('\n')
+    line_split = bff.strip().split('\r\n')
 
     box_raw = [] 
     box = []
@@ -229,9 +229,9 @@ def find_gp1(filename, point):
     
     # change w, h
     w, h = read_bff(filename, 'size')
-    gp = []
+    gp = (0,0,0)
 
-    if point[0][0] > 0 and point[0][0] < 2*w and point[0][1] > 0 and point[0][1] < 2*h:
+    if point[0][0] >= 0 and point[0][0] <= 2*w and point[0][1] >= 0 and point[0][1] <= 2*h:
         box = read_bff(filename, 'box')
         grid = convert_box(read_bff(filename, 'box'))
         if point[0][0] % 2 == 0:
@@ -319,7 +319,7 @@ def find_gp(grid, point, filename):
     
     # change w, h
     w, h = read_bff(filename, 'size')
-    gp = []
+    gp = (0,0,0)
     #print(point[0][0])
     if point[0][0] > 0 and point[0][0] < 2*w and point[0][1] > 0 and point[0][1] < 2*h:
         #box = read_bff(filename, 'box')
@@ -479,6 +479,9 @@ def solve(filename):
         solved = True
         print('dark')        
         # directly pass
+        boxop_left = obox
+        
+        box_left = Bl
 
         # save the following variables:
         # rest block
@@ -499,6 +502,7 @@ def solve(filename):
         nline = len(read_bff(filename, 'sp'))
 
         line1 = first_line(filename, 1)
+        # print(line1)
         
         if len(read_bff(filename, 'sp')) == 1 or len(read_bff(filename, 'sp')) == 2:
             if solved == False:#while
@@ -565,95 +569,109 @@ def solve(filename):
                                 if (test_solution(gridpoints_2,l_start_points, end_points, filename)):
                                     solved = True
                                     print(grid_2)
+
+                                    boxop_left = [box3 for box3 in grid_2 if box3[1] == 'o']
+                                    
+                                    # print(boxop_left)
+                                    # print(usedbox)
+
+                                    brleft = deepcopy(list(br))
+                                    print(brleft)
+                                    for i in usedbox:
+                                        brleft.remove(i)
+                                    # print(brleft)
+                                    box_left = Bl + brleft
+                                    print(box_left)
+                                    
+
                                     break
-
-
 
                                 # update the grid 
                                 # check whether all the point demanded have light passed through
                                 # record the grid
 
-        elif len(read_bff(filename, 'sp')) == 2:
-            line2 = first_line(filename, 2)
-            while solved == False:#while
-                for br in refl: # select an order of A C arrangement
-                        # select on and put in(save the box)
-                    for f1 in line1: # select a box in the first line
-                        # print('f1')
-                        # print(f1)
-                        # [[1,3],'o']
-                        # change the box
-                        # combination
-                        grid_x = deepcopy(import_box)
-                        # this part use a for loop to find the same box, can be upgraded
-                        for i in range(len(grid_x)):
-                            if grid_x[i][0] == f1[0]:
-                                grid_x[i][1] = br[0]
-                                break
-                        boxoption1 = deepcopy(obox)
-                        boxoption1.remove(f1)
+        # elif len(read_bff(filename, 'sp')) == 2:
+        #     line2 = first_line(filename, 2)
+        #     while solved == False:#while
+        #         for br in refl: # select an order of A C arrangement
+        #                 # select on and put in(save the box)
+        #             for f1 in line1: # select a box in the first line
+        #                 # print('f1')
+        #                 # print(f1)
+        #                 # [[1,3],'o']
+        #                 # change the box
+        #                 # combination
+        #                 grid_x = deepcopy(import_box)
+        #                 # this part use a for loop to find the same box, can be upgraded
+        #                 for i in range(len(grid_x)):
+        #                     if grid_x[i][0] == f1[0]:
+        #                         grid_x[i][1] = br[0]
+        #                         break
+        #                 boxoption1 = deepcopy(obox)
+        #                 boxoption1.remove(f1)
 
-                        if f1 in line2:
-                            line2.remove(f1)
+        #                 if f1 in line2:
+        #                     line2.remove(f1)
 
 
 
-                        for f2 in line2: # select a box in the first line
-                            # print('f2')
-                            # print(f2)
-                            # [[1,3],'o']
-                            # change the box
-                            # combination
-                            grid_1 = deepcopy(grid_x)
-                            # this part use a for loop to find the same box, can be upgraded
-                            for i in range(len(grid_1)):
-                                if grid_1[i][0] == f1[0]:
-                                    grid_1[i][1] = br[0]
-                                    break
-                            boxoption = deepcopy(boxoption1)
-                            boxoption.remove(f2)
+        #                 for f2 in line2: # select a box in the first line
+        #                     # print('f2')
+        #                     # print(f2)
+        #                     # [[1,3],'o']
+        #                     # change the box
+        #                     # combination
+        #                     grid_1 = deepcopy(grid_x)
+        #                     # this part use a for loop to find the same box, can be upgraded
+        #                     for i in range(len(grid_1)):
+        #                         if grid_1[i][0] == f1[0]:
+        #                             grid_1[i][1] = br[0]
+        #                             break
+        #                     boxoption = deepcopy(boxoption1)
+        #                     boxoption.remove(f2)
                         
-                            # print('grid_1')
-                            # print(grid_1)
-                            # print('boxoption')
-                            # print(boxoption)
-                            boxoption = list(itertools.combinations(boxoption, len(br)-1)) # after put first box, the rest available box
+        #                     # print('grid_1')
+        #                     # print(grid_1)
+        #                     # print('boxoption')
+        #                     # print(boxoption)
+        #                     boxoption = list(itertools.combinations(boxoption, len(br)-1)) # after put first box, the rest available box
 
 
-                            # variable used by code below
-                            # box option; grid 1, 
-                            # put the other boxes in
-                            for box_op in range(len(boxoption)): # select an order of combination
-                                usedbox = [br[0]]
-                                grid_2 = deepcopy(grid_1) # copy the grid with the first box put in
-                                # record the used box
-                                # update the grid
-                                # print the grid
-                                for box1 in range(len(br)-1):
-                                    # print('br =', br)
-                                    # print('boxoption[box_op]')
-                                    # print(boxoption[box_op])
-                                    for i in range(len(grid_2)):
-                                        # print(1, grid_2[i][0])
-                                        # print(2, boxoption[box_op][box1])
-                                        if grid_2[i][0] == boxoption[box_op][box1][0]:
-                                            grid_2[i][1] = br[box1+1]
-                                            break
-                                    usedbox.append(br[box1+1])
-                                    # print('used box')
-                                    # print(usedbox)
+        #                     # variable used by code below
+        #                     # box option; grid 1, 
+        #                     # put the other boxes in
+        #                     for box_op in range(len(boxoption)): # select an order of combination
+        #                         usedbox = [br[0]]
+        #                         grid_2 = deepcopy(grid_1) # copy the grid with the first box put in
+        #                         # record the used box
+        #                         # update the grid
+        #                         # print the grid
+        #                         for box1 in range(len(br)-1):
+        #                             # print('br =', br)
+        #                             # print('boxoption[box_op]')
+        #                             # print(boxoption[box_op])
+        #                             for i in range(len(grid_2)):
+        #                                 # print(1, grid_2[i][0])
+        #                                 # print(2, boxoption[box_op][box1])
+        #                                 if grid_2[i][0] == boxoption[box_op][box1][0]:
+        #                                     grid_2[i][1] = br[box1+1]
+        #                                     break
+        #                             usedbox.append(br[box1+1])
+        #                             # print('used box')
+        #                             # print(usedbox)
 
-                                    # print('grid_2')
-                                    # print(grid_2)
+        #                             # print('grid_2')
+        #                             # print(grid_2)
 
-                                    l_start_points = read_bff(filename, 'sp')
-                                    end_points = read_bff(filename, 'ep')
-                                    gridpoints_2 = convert_box(grid_2)
+        #                             l_start_points = read_bff(filename, 'sp')
+        #                             end_points = read_bff(filename, 'ep')
+        #                             gridpoints_2 = convert_box(grid_2)
 
 
-                                    if (test_solution(gridpoints_2,l_start_points, end_points, filename)):
-                                        solved = True
-                                        print(grid_2)
+        #                             if (test_solution(gridpoints_2,l_start_points, end_points, filename)):
+        #                                 solved = True
+        #                                 print(grid_2)
+
     # if there are B block left, put the inside
 
 
@@ -671,7 +689,7 @@ def solve(filename):
 
 
 if __name__ == "__main__":
-    solve('mad_4.bff')
+    solve('showstopper_4.bff')
     # a = convert_box('mad_7_test.bff')
     # print(a)
     # ep = read_bff('mad_7.bff', 'ep')
@@ -679,8 +697,8 @@ if __name__ == "__main__":
     # b = read_bff('mad_7.bff', 'box')
     # print(b)
     # print(find_gp1(b[1], 'mad_7.bff'))
-    # print(first_line('mad_7.bff', 1))
-    # c = first_line(1, 'mad_7.bff')
+    # print(first_line('showstopper_4.bff', 1))
+    # c = first_line('mad_7.bff', 1)
     # print(c)
     
 
