@@ -276,8 +276,6 @@ class Block():
         self.l_start_point = l_start_point
         self.new_l1 = []
         self.new_l2 = []
-        #print(self.grid_point[2])
-        #print(self.l_start_point)
     
         if self.grid_point[2] == 'o' or 'x':
             self.new_l1 = self.l_start_point
@@ -319,7 +317,8 @@ def find_gp(grid, point, filename):
     
     # change w, h
     w, h = read_bff(filename, 'size')
-    gp = (0,0,0)
+    #print(grid)
+    gp = []
     #print(point[0][0])
     if point[0][0] > 0 and point[0][0] < 2*w and point[0][1] > 0 and point[0][1] < 2*h:
         #box = read_bff(filename, 'box')
@@ -332,7 +331,7 @@ def find_gp(grid, point, filename):
             if grid[i][0] == point[0] and grid[i][1] == face:
                 gp = grid[i]
                 break
-        return gp    
+        return gp   
     
     if point[0][0] == 0 and point[1][0] == 1: 
         face = [-point[1][0], 0]
@@ -343,24 +342,25 @@ def find_gp(grid, point, filename):
         return gp
     if point[0][0] == 2*w and point[1][0] == -1:
         face = [-point[1][0], 0]
-        for i in range(len(grid)):
-            if grid[i][0] == point[0] and grid[i][1] == face:
-                gp = grid[i]
+        for j in range(len(grid)):
+            if grid[j][0] == point[0] and grid[j][1] == face:
+                gp = grid[j]
                 break
         return gp       
     if point[0][1] == 0 and point[1][1] == 1:
         face = [0, -point[1][1]]
-        for i in range(len(grid)):
-            if grid[i][0] == point[0] and grid[i][1] == face:
-                gp = grid[i]
+        for k in range(len(grid)):
+            if grid[k][0] == point[0] and grid[k][1] == face:
+                gp = grid[k]
                 break
         return gp
     if point[0][1] == 2*h and point[1][1] == -1:
         face = [0, -point[1][1]]
-        for i in range(len(grid)):
-            if grid[i][0] == point[0] and grid[i][1] == face:
-                gp = grid[i]
-                break        
+        for l in range(len(grid)):
+            if grid[l][0] == point[0] and grid[l][1] == face:
+                gp = grid[l]
+                #print(gp)
+                break      
         return gp
             
     if point[0][0] == 0 and point[1][0] == -1: 
@@ -374,7 +374,13 @@ def find_gp(grid, point, filename):
         return gp  
     if point[0][1] == 2*h and point[1][1] == 1:
         gp = [[],[],'B']
-        return gp  
+        return gp
+    if point[0][0] < 0 or point[0][0] > 2*w or point[0][1] < 0 or point[0][1] > 2*h:
+        gp = [[],[],'B']
+        return gp
+        
+
+    #raise Exception("Error - Something went wrong here")
     
  
 #print(find_gp(grid_points,l_start_points))
@@ -413,7 +419,6 @@ def test_solution(grid_points, l_start_points, end_points, filename):
         laser_path_point = laser_path_point + deepcopy(l_start_points)
         #print(laser_path_point)
         l_start_points = update_laser(grid_points, l_start_points, filename)
-        #print(l_start_points)
     
     for i in range(len(laser_path_point)):
         #print(laser_path_point[i][0])
@@ -434,8 +439,6 @@ def test_solution(grid_points, l_start_points, end_points, filename):
                 same_xy = same_xy + 1
     #print(same_xy)
     if len(end_points) == same_xy:
-        print(laser_path_point1)
-        print(laser_path_point2)
         return True
     if len(end_points) != same_xy:
         return False
@@ -695,7 +698,13 @@ def solve(filename):
 
 
 if __name__ == "__main__":
-    solve('dark_1.bff')
+
+    solve('showstopper_4.bff')
+    #a = convert_box(read_bff('showstopper_4_copy.bff', 'box'))
+    #print(a)
+    #sp = read_bff('showstopper_4_copy.bff', 'sp')
+    #print(sp)
+    # solve('showstopper_4.bff')
     # a = convert_box('mad_7_test.bff')
     # print(a)
     # ep = read_bff('mad_7.bff', 'ep')
