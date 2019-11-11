@@ -87,11 +87,11 @@ def find_gp(grid, point):
 #print(find_gp(grid_points,l_start_points))
     
 
-def update_laser(grid_points, l_start_points, w, h):
+def update_laser(grid_points, l_start_points):
     laser_out_points = []
     
     for i in range(len(l_start_points)):
-        grid_point = find_gp(grid_points, l_start_points[i], w, h)
+        grid_point = find_gp(grid_points, l_start_points[i])
         #print(grid_point)
         a = Block(grid_point, l_start_points[i])
         new_l1 = a.new_l1
@@ -116,7 +116,7 @@ def test_solution(grid_points, l_start_points, end_points):
     while len(l_start_points) > 0:
         laser_path_point = laser_path_point + deepcopy(l_start_points)
         #print(laser_path_point)
-        l_start_points = update_laser(grid_points, l_start_points, w, h)
+        l_start_points = update_laser(grid_points, l_start_points)
         #print(l_start_points)
     
     for i in range(len(laser_path_point)):
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     end_points = [[6, 3], [6, 5], [6, 7], [2, 9], [9, 6]]
 
     #l_start_points = [[[2,1],[1,1]],[[9,4],[-1,1]]]
-    print(test_solution(grid_points,l_start_points, end_points, 5, 5))
+    print(test_solution(grid_points,l_start_points, end_points))
 
             
 
