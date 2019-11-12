@@ -8,4 +8,5 @@ The example of different colors used to account for different types of blocks ar
 ![Image text](https://github.com/arthurzhang434/Lazor_Project_Ruihao_Huaizhong/blob/master/sample.png)<b>
 Most of the games (like tiny_5 and mad_1) will be solved correctly in a couple of seconds by our code.<b>
 However, complex games (like mad_7) could be solved but it requires more time (a couple of minutes).<b>
+  <b>
 Group member: Ruihao Ni, Huaizhong Zhang<b>
