@@ -365,6 +365,7 @@ def find_gp(grid, point, filename):
     '''
     w, h = read_bff(filename, 'size')
     gp = []
+    # if the laser starting point is in the boundary
     if point[0][0] > 0 and point[0][0] < 2*w and point[0][1] > 0 and point[0][1] < 2*h:
         if point[0][0] % 2 == 0:
             face = [-point[1][0], 0]
@@ -375,7 +376,8 @@ def find_gp(grid, point, filename):
                 gp = grid[i]
                 break
         return gp   
-    
+    # if the laser starting point is on the boundary
+    # but the direction is inside the boundary
     if point[0][0] == 0 and point[1][0] == 1: 
         face = [-point[1][0], 0]
         for i in range(len(grid)):
@@ -407,7 +409,8 @@ def find_gp(grid, point, filename):
                 gp = grid[l]
                 break      
         return gp
-            
+    # if the laser starting point is on the boundary
+    # and the direction is outside the boundary            
     if point[0][0] == 0 and point[1][0] == -1: 
         gp = [[],[],'B']
         return gp
@@ -423,7 +426,7 @@ def find_gp(grid, point, filename):
     if point[0][1] == 2*h and point[1][1] == 1:
         gp = [[],[],'B']
         return gp
-    
+    # if the laser starting point is out of the boundary
     if point[0][0] < 0 or point[0][0] > 2*w or point[0][1] < 0 or point[0][1] > 2*h:
         gp = [[],[],'B']
         return gp   
@@ -562,7 +565,7 @@ def solution_output(solution0,filename, dim=50, gap=5):
             
     img.show()
             
-    #img.save('Solution.png')
+    img.save('Solution.png')
 
 def solve(filename):
     '''
@@ -844,8 +847,8 @@ if __name__ == "__main__":
     # solve('yarn_5.bff')
     # solve('showstopper_4.bff')
     # solve('dark_1.bff')
-    # solve('mad_1.bff')
+    solve('mad_1.bff')
     # solve('mad_4.bff')
     # solve('dark_1.bff')
-    solve('tiny_5.bff')
+    # solve('tiny_5.bff')
     # solve('tiny_5.bff')
