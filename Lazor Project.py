@@ -45,7 +45,6 @@ Type of variate: list of list
     B: terminate the ray
     C: pass and reflect
 
-
 3. Ray point:
 
     a for loop
@@ -80,23 +79,6 @@ Type of variate: list of list
     then start overt
 
 '''
-
-'''
-Finished by Ruihao
-read the bff file
-
-returned value:
-
-box_ori two dimensional list
-number of A, B, C: nA, nB, nC
-
-start point
-[[rx, ry], [vx, vy)] 
-
-end point
-(x,y)
-
-'''
 import itertools
 from copy import deepcopy
 from PIL import Image
@@ -113,6 +95,28 @@ def read_bff(filename, select):
 
     select: *str*
     the selector to choose which value will be returned
+
+    **Return**
+    box_raw
+    [[o, o, o],
+    [o, A, x],
+    [B, o, x]]
+
+    box
+    box with coordination
+
+    size of the box
+    w, h
+    how many boxes per line/column
+
+    number of A, B, C: 
+    nA, nB, nC
+
+    start point
+    [[rx, ry], [vx, vy)] 
+
+    end point
+    (x,y)
     '''
     fi = open(filename, 'r')
     bff = fi.read()
@@ -186,21 +190,21 @@ def read_bff(filename, select):
 
     fi.close()
 
-'''
-convert the box to grid point with the type
-'''
 def convert_box(box):
-
-#     (2) orientation (ox, oy):
-#     up (0, -1) / down (0,1) / left (-1, 0) / right (1, 0)
-#     (3) type: o/ A/ B/ C
-#     o: pass the point
-#     A: reflect
-#     B: terminate the ray
-#     C: pass and reflect
-#     convert [[cx,cy], gridtype] to
-#     [[gx, gy], [ox, oy], gridtype]
+'''
+    convert the box to grid point with the type
+    (orientation (ox, oy):
+    up (0, -1) / down (0,1) / left (-1, 0) / right (1, 0)
+    (3) type: o/ A/ B/ C
+    o: pass the point
+    A: reflect
+    B: terminate the ray
+    C: pass and reflect
+    convert [[cx,cy], gridtype] to
+    [[gx, gy], [ox, oy], gridtype]
+'''
     grid_point = []
+
     for b in box:
         x, y = b[0]
         gridtype = b[1]
@@ -218,6 +222,7 @@ def convert_box(box):
 def convert_grid(grid):
 #     convert [[gx, gy], [ox, oy], gridtype]  to
 #     [[cx,cy], gridtype]
+
     if grid[1] == [-1, 0]:
         return [[grid[0][0] + 1, grid[0][1]], grid[2]]
     if grid[1] == [1, 0]:
@@ -226,7 +231,6 @@ def convert_grid(grid):
         return [[grid[0][0], grid[0][1] + 1], grid[2]]
     if grid[1] == [0, 1]:
         return [[grid[0][0], grid[0][1] - 1], grid[2]]
-
 
 # given a incident ray, find the grid point that face to the ray (can reflect)
 
@@ -252,7 +256,12 @@ def find_gp1(filename, point):
     else:
         return 'out'
 
-def first_line(filename, n):  # also need to add start point
+def first_line(filename, n):
+    '''
+    Finished by Ruihao
+    
+    '''
+    # also need to add start point
     # use the initial condition to find the boxes on the line
     # n can be 1 or 2 generate line for first or second line
     start_point = read_bff(filename, 'sp')
