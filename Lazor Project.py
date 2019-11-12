@@ -191,7 +191,7 @@ def read_bff(filename, select):
     fi.close()
 
 def convert_box(box):
-'''
+    '''
     finished by Ruihao
 
     **Parameters**
@@ -211,7 +211,7 @@ def convert_box(box):
     A: reflect
     B: terminate the ray
     C: pass and reflect
-'''
+    '''
     grid_point = []
 
     for b in box:
@@ -869,14 +869,14 @@ def solve(filename):
         #                                 print(box_left)
         #                                 grid_s1 = grid_2
         #                                 break
-'''
+    '''
     if there are B block left, put them inside
     copy the grid solved
     assign B box
     testing
     grid_solved_final
     then final output
-'''
+    '''
     if box_left == []:
         grid_3 = grid_s1
         print(grid_3)
@@ -908,10 +908,8 @@ if __name__ == "__main__":
     # solve('yarn_5.bff')  # takes long time to solve
     # solve('showstopper_4.bff')  # solved
     # solve('dark_1.bff')  # solved
-    solve('mad_1.bff')  # solved
+    # solve('mad_1.bff')  # solved
     # solve('mad_4.bff')  # solved
     # solve('tiny_5.bff')  # solved
-    # solve('numbered_6.bff')  # solved
+    solve('numbered_6.bff')  # solved
     # solve('mad_7.bff')  # takes long time to solve
-
-
