@@ -1,5 +1,7 @@
-# Lazor Project
 '''
+Lazor project
+author: Ruihao Ni, Huaizhong Zhang
+
 1. arrange A B C into the empty O site to generate 
 a random distribution of the box.
 
@@ -13,7 +15,6 @@ ray pass through.
 Type of variate: list of list
 
 1. Box: 
-
    box[]
 
     (1) Center position (cx, cy): 
@@ -101,16 +102,27 @@ from copy import deepcopy
 from PIL import Image
 
 def read_bff(filename, select):
+    '''
+    finished by Ruihao
+
+    Read the bff file and pick up all the information
+
+    **Parameters**
+    filename: *str*
+    The .bff file that contains all the Lazor information
+
+    select: *str*
+    the selector to choose which value will be returned
+    '''
     fi = open(filename, 'r')
     bff = fi.read()
     line_split = bff.strip().split('\n')
 
-    box_raw = [] 
+    box_raw = []
     box = []
     start_point = []
     end_point = []
-
-# convert the box text into a 2D list
+    
     a = line_split.index('GRID START')
     b = line_split.index('GRID STOP')
 
@@ -121,15 +133,12 @@ def read_bff(filename, select):
             if i != ' ':
                 box_line.append(i)
         box_raw.append(box_line)
-
 # convert box raw to box with [(cx,cy), boxtype]
 
     for y in range(len(box_raw)):
         for x in range(len(box_raw[y])):
             box.append([[2 * x + 1, 2 * y + 1], box_raw[y][x]])
-
 # convert the start point, end point and number of boxes into lists
-
     nA, nB, nC = 0, 0, 0
     for line in line_split[b+1:(len(line_split))]:
         if line.startswith('A'):
@@ -183,9 +192,8 @@ convert the box to grid point with the type
 '''
 def convert_box(box):
 
-# (2) orientation (ox, oy): 
+#     (2) orientation (ox, oy):
 #     up (0, -1) / down (0,1) / left (-1, 0) / right (1, 0)
-
 #     (3) type: o/ A/ B/ C
 #     o: pass the point
 #     A: reflect
@@ -713,7 +721,9 @@ def solve(filename):
 
     # if there are B block left, put the inside
     if box_left == []:
-        print(grid_s1)
+        grid_3 = grid_s1
+        print(grid_3)
+
     else:    
         solved = False
         boxop_left = list(itertools.combinations(boxop_left,len(box_left)))
