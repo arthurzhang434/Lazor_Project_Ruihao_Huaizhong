@@ -98,6 +98,7 @@ end point
 '''
 import itertools
 from copy import deepcopy
+from PIL import Image
 
 def read_bff(filename, select):
     fi = open(filename, 'r')
@@ -285,9 +286,7 @@ class Block():
             self.new_l1 = self.opaque()
         if self.grid_point[2]== 'C':
             self.new_l1, self.new_l2 = self.refract()
-        #print(self.new_l1, self.new_l2)    
-        
-    
+           
     def reflect(self):
         if self.grid_point[1][0] == 0:
             self.l_start_point[1][1] = -self.l_start_point[1][1]
@@ -306,23 +305,16 @@ class Block():
         self.l_start_point[1][0] = 0
         self.l_start_point[1][1] = 0
         self.new_l1 = self.l_start_point
-        return self.new_l1
-#Block(alist,blist)       
+        return self.new_l1     
     
-#def find_gp(filename, point):
 def find_gp(grid, point, filename):
     # filename: in which picture
     # point e.g. : [[2, 1[], [1, 1]]
     # grid point [[8, 9], [-1, 0], 'o']
     
-    # change w, h
     w, h = read_bff(filename, 'size')
-    #print(grid)
     gp = []
-    #print(point[0][0])
     if point[0][0] > 0 and point[0][0] < 2*w and point[0][1] > 0 and point[0][1] < 2*h:
-        #box = read_bff(filename, 'box')
-        #grid = convert_box(filename)
         if point[0][0] % 2 == 0:
             face = [-point[1][0], 0]
         if point[0][0] % 2 != 0:
@@ -340,13 +332,15 @@ def find_gp(grid, point, filename):
                 gp = grid[i]
                 break
         return gp
+    
     if point[0][0] == 2*w and point[1][0] == -1:
         face = [-point[1][0], 0]
         for j in range(len(grid)):
             if grid[j][0] == point[0] and grid[j][1] == face:
                 gp = grid[j]
                 break
-        return gp       
+        return gp 
+      
     if point[0][1] == 0 and point[1][1] == 1:
         face = [0, -point[1][1]]
         for k in range(len(grid)):
@@ -354,44 +348,42 @@ def find_gp(grid, point, filename):
                 gp = grid[k]
                 break
         return gp
+    
     if point[0][1] == 2*h and point[1][1] == -1:
         face = [0, -point[1][1]]
         for l in range(len(grid)):
             if grid[l][0] == point[0] and grid[l][1] == face:
                 gp = grid[l]
-                #print(gp)
                 break      
         return gp
             
     if point[0][0] == 0 and point[1][0] == -1: 
         gp = [[],[],'B']
         return gp
+    
     if point[0][0] == 2*w and point[1][0] == 1:
         gp = [[],[],'B']
-        return gp        
+        return gp   
+     
     if point[0][1] == 0 and point[1][1] == -1:
         gp = [[],[],'B']
         return gp  
+    
     if point[0][1] == 2*h and point[1][1] == 1:
         gp = [[],[],'B']
         return gp
+    
     if point[0][0] < 0 or point[0][0] > 2*w or point[0][1] < 0 or point[0][1] > 2*h:
         gp = [[],[],'B']
-        return gp
+        return gp   
+
+    raise Exception("Error - Something went wrong here")
         
-
-    #raise Exception("Error - Something went wrong here")
-    
- 
-#print(find_gp(grid_points,l_start_points))
-    
-
 def update_laser(grid_points, l_start_points, filename):
     laser_out_points = []
     
     for i in range(len(l_start_points)):
         grid_point = find_gp(grid_points, l_start_points[i], filename)
-        #print(grid_point)
         a = Block(grid_point, l_start_points[i])
         new_l1 = a.new_l1
         new_l2 = a.new_l2
@@ -399,7 +391,6 @@ def update_laser(grid_points, l_start_points, filename):
             new_l1[0][0] = new_l1[0][0] + new_l1[1][0]
             new_l1[0][1] = new_l1[0][1] + new_l1[1][1]            
             laser_out_points.append(new_l1)
-            
                 
         if len(new_l2) != 0 and new_l2[1][0] != 0:
             new_l2[0][0] = new_l2[0][0] + new_l2[1][0]
@@ -409,7 +400,6 @@ def update_laser(grid_points, l_start_points, filename):
     return(laser_out_points)
     
 def test_solution(grid_points, l_start_points, end_points, filename):
-    #print(grid_points)
     laser_path_point = []
     laser_path_point1 = []
     same_xy = 0
@@ -417,31 +407,64 @@ def test_solution(grid_points, l_start_points, end_points, filename):
 
     while len(l_start_points) > 0:
         laser_path_point = laser_path_point + deepcopy(l_start_points)
-        #print(laser_path_point)
         l_start_points = update_laser(grid_points, l_start_points, filename)
     
     for i in range(len(laser_path_point)):
-        #print(laser_path_point[i][0])
         laser_path_point1 = laser_path_point1 + [laser_path_point[i][0]]
     
     for item in laser_path_point1:
         if not item in laser_path_point2:
             laser_path_point2.append(item)
-            
-    #print(laser_path_point1)
-    #print(laser_path_point2)
-                            
-
         
     for j in range(len(end_points)):
         for k in range(len(laser_path_point2)):
             if end_points[j] == laser_path_point2[k]:
                 same_xy = same_xy + 1
-    #print(same_xy)
+
     if len(end_points) == same_xy:
         return True
     if len(end_points) != same_xy:
         return False
+    
+def set_colors(img, x0, y0, dim, gap, color):
+    for x in range(dim):
+        for y in range(dim):
+            img.putpixel((gap + (gap+dim)*x0 + x, gap + (gap+dim)*y0 + y),
+                         color
+                    )            
+
+def solution_output(solution0, dim=50, gap=5, filename):
+    w, h = read_bff(filename, 'size')
+    colors ={'o':(148, 156, 165),
+         'x':(70, 71, 71),
+         'A':(203, 228, 255),
+         'B':(0,0,0),
+         'C':(176,174,174),
+         'gap':(255, 255, 255)
+        }
+    solution1  = []
+    solution2 = []
+    x = 0
+    for j in range(int(len(solution0)/w)):
+        for i in range(int(len(solution0)/h)):
+            solution1.append(solution0[w*x + i][1])
+        solution2.append(solution1)
+        x = x + 1
+        solution1 = []
+    
+    w_blocks = len(solution2[0])
+    h_blocks = len(solution2)
+    size = (w_blocks*(dim+gap) + gap, h_blocks*(dim+gap) + gap)
+    img = Image.new("RGB", size, color=colors['gap'])
+
+    
+    for y1, y2 in enumerate(solution2):
+        for x1, x2 in enumerate(y2):
+            set_colors(img, x1, y1, dim, gap, colors[x2])
+            
+    img.show()
+            
+    #img.save('Solution.png')
 '''
 
 '''
@@ -705,7 +728,7 @@ if __name__ == "__main__":
     # b = read_bff('mad_7.bff', 'box')
     # print(b)
     # print(find_gp1(b[1], 'mad_7.bff'))
-    print(first_line('showstopper_4.bff', 1))
+    #print(first_line('showstopper_4.bff', 1))
     # c = first_line('mad_7.bff', 1)
     # print(c)
     
