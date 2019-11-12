@@ -274,11 +274,36 @@ def first_line(filename, n): # also need to add start point
         blockpath.append(convert_grid(i))
     return blockpath    
 '''
-
+Finished by Huaizhong Zhang
 '''
 class Block():
+    '''
+    This class object describes different types of blocks in the game
+    and how do they affect the laser touching them
+    'o' or 'x' are no blocks
+    'A' is a reflect block
+    'B' is a opaque block
+    'C' is a refract block        
+    '''
     
     def __init__(self, grid_point, l_start_point): 
+        '''
+        initializing the block
+        **Parameters**
+            grid_point: *list, int, str*
+                a list of int and str contains the position 
+                and type of a grid_point
+            l_start_point: *list, int*
+                a list of int contains the position and 
+                direction of the laser before touching a block
+        **Returns**
+            new_l1: *list, int*
+                a list of int contains the position and 
+                direction of the laser after touching a block
+            new_l2: *list, int*
+                a list of int contains the position and 
+                direction of the laser after touching a block               
+        '''
         self.grid_point = grid_point
         self.l_start_point = l_start_point
         self.new_l1 = []
@@ -294,6 +319,9 @@ class Block():
             self.new_l1, self.new_l2 = self.refract()
            
     def reflect(self):
+        '''
+        accounting for the affect of block 'A' to the laser        
+        '''
         if self.grid_point[1][0] == 0:
             self.l_start_point[1][1] = -self.l_start_point[1][1]
             self.new_l1 = self.l_start_point
@@ -303,21 +331,39 @@ class Block():
         return self.new_l1
                     
     def refract(self):
+        '''
+        accounting for the affect of block 'C' to the laser        
+        '''
         self.new_l2 = deepcopy(self.l_start_point)
         self.reflect()
         return self.new_l1, self.new_l2
         
     def opaque(self):
+        '''
+        accounting for the affect of block 'B' to the laser        
+        '''
         self.l_start_point[1][0] = 0
         self.l_start_point[1][1] = 0
         self.new_l1 = self.l_start_point
         return self.new_l1     
     
 def find_gp(grid, point, filename):
-    # filename: in which picture
-    # point e.g. : [[2, 1[], [1, 1]]
-    # grid point [[8, 9], [-1, 0], 'o']
-    
+    '''
+    find the desire grid point for a given laser starting point
+    **Parameters**
+        grid:*list, int, str*
+            a list of int and str contains the position and 
+            type of a list of grid points
+        point:*list, int*
+            a list of int contains the position and direction
+            of a given laser starting point
+        filename:*str*
+            a string contains the name of the game we want to solve
+    **Returns**
+        gp:*list, int, str*
+            a lsit of int and str contains the position and type 
+            of the desire grid point
+    '''
     w, h = read_bff(filename, 'size')
     gp = []
     if point[0][0] > 0 and point[0][0] < 2*w and point[0][1] > 0 and point[0][1] < 2*h:
@@ -386,6 +432,23 @@ def find_gp(grid, point, filename):
     raise Exception("Error - Something went wrong here")
         
 def update_laser(grid_points, l_start_points, filename):
+    '''
+    updating the position and direction of given 
+    laser starting points after it touching the next block    
+    **Parameters**
+        grid_points:*list, int, str*
+            a list of int and str contains the position and 
+            type of a list of grid points
+        l_start_points:*list, int*
+            a list of int contains the position and direction
+            of given laser starting points
+        filename:*str*
+            a string contains the name of the game we want to solve
+    **Returns**
+        laser_out_points:*list, int*
+            a lsit of int contains the position and direction
+            of of given laser starting points after it touching the next block
+    '''
     laser_out_points = []
     
     for i in range(len(l_start_points)):
@@ -406,6 +469,25 @@ def update_laser(grid_points, l_start_points, filename):
     return(laser_out_points)
     
 def test_solution(grid_points, l_start_points, end_points, filename):
+    '''
+    testing whether the given grid points could sovle the laser game 
+    **Parameters**
+        grid_points:*list, int, str*
+            a list of int and str contains the position and 
+            type of a list of grid points
+        l_start_points:*list, int*
+            a list of int contains the position and direction
+            of given laser starting points
+        end_points:*list, int*
+            a list of int contains the position of the target points        
+        filename:*str*
+            a string contains the name of the game we want to solve
+    **Returns**
+        True:
+            the game has been sovled
+        False:
+            the game has not been solved
+    '''
     laser_path_point = []
     laser_path_point1 = []
     same_xy = 0
@@ -440,13 +522,24 @@ def set_colors(img, x0, y0, dim, gap, color):
                     )            
 
 def solution_output(solution0,filename, dim=50, gap=5):
+    '''
+    Converting the output of the answer to an image
+    **Parameters**
+        Solution0:*list, int, str*
+            a list of int and str contains output (the position and 
+            type of a list of grid points)       
+        filename:*str*
+            a string contains the name of the game we want to solve
+    **Returns**
+        None
+    '''    
     w, h = read_bff(filename, 'size')
-    colors ={'o':(148, 156, 165),
-         'x':(70, 71, 71),
+    colors ={'o':(192, 192, 192),
+         'x':(128, 128, 128),
          'A':(203, 228, 255),
          'B':(0,0,0),
-         'C':(176,174,174),
-         'gap':(255, 255, 255)
+         'C':(245,245,245),
+         'gap':(128, 128, 128)
         }
     solution1  = []
     solution2 = []
@@ -723,6 +816,7 @@ def solve(filename):
     if box_left == []:
         grid_3 = grid_s1
         print(grid_3)
+        solution_output(grid_3,filename, dim=50, gap=5)
 
     else:    
         solved = False
@@ -745,6 +839,8 @@ def solve(filename):
                             if (test_solution(grid_final,l_start_points, end_points, filename)):
                                 solved = True
                                 print(grid_3)
+                                solution_output(grid_3,filename, dim=50, gap=5)
+                                
                                 break
 
     #     copy the grid solved
@@ -754,11 +850,11 @@ def solve(filename):
     #     then final output
 
 if __name__ == "__main__":
-    solve('yarn_5.bff')
+    # solve('yarn_5.bff')
     # solve('showstopper_4.bff')
     # solve('dark_1.bff')
     # solve('mad_1.bff')
     # solve('mad_4.bff')
     # solve('dark_1.bff')
-    # solve('tiny_5.bff')
+    solve('tiny_5.bff')
 
