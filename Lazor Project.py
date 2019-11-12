@@ -102,7 +102,7 @@ from copy import deepcopy
 def read_bff(filename, select):
     fi = open(filename, 'r')
     bff = fi.read()
-    line_split = bff.strip().split('\n')
+    line_split = bff.strip().split('\r\n')
 
     box_raw = [] 
     box = []
@@ -592,10 +592,15 @@ def solve(filename):
 
         # elif len(read_bff(filename, 'sp')) == 2:
         #     line2 = first_line(filename, 2)
-        #     while solved == False:#while
-        #         for br in refl: # select an order of A C arrangement
+        #     if solved == False:#while
+        #         for br in refl:
+        #             if solved == True:
+        #                 break
+        #                 # select an order of A C arrangement
         #                 # select on and put in(save the box)
         #             for f1 in line1: # select a box in the first line
+        #                 if solved == True:
+        #                     break
         #                 # print('f1')
         #                 # print(f1)
         #                 # [[1,3],'o']
@@ -613,9 +618,9 @@ def solve(filename):
         #                 if f1 in line2:
         #                     line2.remove(f1)
 
-
-
         #                 for f2 in line2: # select a box in the first line
+        #                     if solved == True:
+        #                         break
         #                     # print('f2')
         #                     # print(f2)
         #                     # [[1,3],'o']
@@ -641,15 +646,19 @@ def solve(filename):
         #                     # box option; grid 1, 
         #                     # put the other boxes in
         #                     for box_op in range(len(boxoption)): # select an order of combination
+        #                         if solved == True:
+        #                             break
         #                         usedbox = [br[0]]
         #                         grid_2 = deepcopy(grid_1) # copy the grid with the first box put in
         #                         # record the used box
         #                         # update the grid
         #                         # print the grid
+
+
         #                         for box1 in range(len(br)-1):
-        #                             # print('br =', br)
-        #                             # print('boxoption[box_op]')
-        #                             # print(boxoption[box_op])
+        #                         # print('br =', br)
+        #                         # print('boxoption[box_op]')
+        #                         # print(boxoption[box_op])
         #                             for i in range(len(grid_2)):
         #                                 # print(1, grid_2[i][0])
         #                                 # print(2, boxoption[box_op][box1])
@@ -659,10 +668,8 @@ def solve(filename):
         #                             usedbox.append(br[box1+1])
         #                             # print('used box')
         #                             # print(usedbox)
-
         #                             # print('grid_2')
         #                             # print(grid_2)
-
         #                             l_start_points = read_bff(filename, 'sp')
         #                             end_points = read_bff(filename, 'ep')
         #                             gridpoints_2 = convert_box(grid_2)
@@ -672,18 +679,46 @@ def solve(filename):
         #                                 solved = True
         #                                 print(grid_2)
 
+        #                                 boxop_left = [box3 for box3 in grid_2 if box3[1] == 'o']
+                                        
+        #                                 print(boxop_left)
+        #                                 # print(usedbox)
+
+        #                                 brleft = deepcopy(list(br))
+        #                                 print(brleft)
+        #                                 for i in usedbox:
+        #                                     brleft.remove(i)
+        #                                 # print(brleft)
+        #                                 box_left = Bl + brleft
+        #                                 print(box_left)
+        #                                 grid_s1 = grid_2
+
+        #                                 break
+                                
+
+
+    
     # if there are B block left, put the inside
-
-
+    boxop_left = list(itertools.combinations(boxop_left,len(box_left)))
     for box_op1 in range(len(boxop_left)):
-        
         grid_3 = deepcopy(grid_s1)
-        for box4 in range(box_left):
-            for i in range(len(grid_s1)):
-                if grid_s1[i][0] == boxop_left[box_op1][box4]:
-                    grid_s1[i][1]= 
+        for box4 in range(len(box_left)):
+            for i in range(len(grid_3)):
+                if grid_3[i][0] == boxop_left[box_op1][box4][0]:
+                    grid_3[i][1]= box_left[box4]
 
-            
+                    grid_final = convert_box(grid_3)
+                    if (test_solution(grid_final,l_start_points, end_points, filename)):
+                        solved = True
+                        print(grid_3)
+                        break
+
+
+
+               
+
+                                       
+       
 
     #     copy the grid solved
     #     assign B box
@@ -699,7 +734,7 @@ def solve(filename):
 
 if __name__ == "__main__":
 
-    solve('showstopper_4.bff')
+    solve('numbered_6.bff')
     #a = convert_box(read_bff('showstopper_4_copy.bff', 'box'))
     #print(a)
     #sp = read_bff('showstopper_4_copy.bff', 'sp')
