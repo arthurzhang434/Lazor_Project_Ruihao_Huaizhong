@@ -103,7 +103,7 @@ from PIL import Image
 def read_bff(filename, select):
     fi = open(filename, 'r')
     bff = fi.read()
-    line_split = bff.strip().split('\r\n')
+    line_split = bff.strip().split('\n')
 
     box_raw = [] 
     box = []
@@ -233,7 +233,6 @@ def find_gp1(filename, point):
     gp = (0,0,0)
 
     if point[0][0] >= 0 and point[0][0] <= 2*w and point[0][1] >= 0 and point[0][1] <= 2*h:
-        box = read_bff(filename, 'box')
         grid = convert_box(read_bff(filename, 'box'))
         if point[0][0] % 2 == 0:
             face = [-point[1][0], 0]
@@ -250,7 +249,6 @@ def find_gp1(filename, point):
 def first_line(filename, n): # also need to add start point
     # use the initial condition to find the boxes on the line
     # n can be 1 or 2 generate line for first or second line 
-    box = read_bff(filename, 'box')
     start_point = read_bff(filename, 'sp')
     pline = start_point[n-1]
     # print (pline)
@@ -433,7 +431,7 @@ def set_colors(img, x0, y0, dim, gap, color):
                          color
                     )            
 
-def solution_output(solution0, dim=50, gap=5, filename):
+def solution_output(solution0,filename, dim=50, gap=5):
     w, h = read_bff(filename, 'size')
     colors ={'o':(148, 156, 165),
          'x':(70, 71, 71),
@@ -475,8 +473,6 @@ def solve(filename):
     # the overall block exceed 12, so we need some strategy when we try to put the 
     # ABC block on the availabe position on o.
     # the order of assigning the position: refract and reflect box (refl), then the opaque
-
-    import_br = read_bff(filename, 'br')
     import_box = read_bff(filename, 'box')
     nA, nB, nC = read_bff(filename, 'nABC')
 
@@ -525,8 +521,6 @@ def solve(filename):
         # print(refl) # refl: permutation of all the reflect/refract box
         # [['A', 'A', 'C'], ['A', 'C', 'A']]
         # print(obox)
-        nline = len(read_bff(filename, 'sp'))
-
         line1 = first_line(filename, 1)
         # print(line1)
         
@@ -591,7 +585,7 @@ def solve(filename):
 
                                 if (test_solution(gridpoints_2,l_start_points, end_points, filename)):
                                     solved = True
-                                    print(grid_2)
+                                    # print(grid_2)
 
                                     boxop_left = [box3 for box3 in grid_2 if box3[1] == 'o']
                                     
@@ -599,12 +593,12 @@ def solve(filename):
                                     # print(usedbox)
 
                                     brleft = deepcopy(list(br))
-                                    print(brleft)
+                                    # print(brleft)
                                     for i in usedbox:
                                         brleft.remove(i)
                                     # print(brleft)
                                     box_left = Bl + brleft
-                                    print(box_left)
+                                    # print(box_left)
                                     grid_s1 = grid_2
 
                                     break
@@ -715,70 +709,46 @@ def solve(filename):
         #                                 box_left = Bl + brleft
         #                                 print(box_left)
         #                                 grid_s1 = grid_2
-
         #                                 break
-                                
 
-
-    
     # if there are B block left, put the inside
-    boxop_left = list(itertools.combinations(boxop_left,len(box_left)))
-    for box_op1 in range(len(boxop_left)):
-        grid_3 = deepcopy(grid_s1)
-        for box4 in range(len(box_left)):
-            for i in range(len(grid_3)):
-                if grid_3[i][0] == boxop_left[box_op1][box4][0]:
-                    grid_3[i][1]= box_left[box4]
-
-                    grid_final = convert_box(grid_3)
-                    if (test_solution(grid_final,l_start_points, end_points, filename)):
-                        solved = True
-                        print(grid_3)
-                        break
-
-
-
-               
-
-                                       
-       
+    if box_left == []:
+        print(grid_s1)
+    else:    
+        solved = False
+        boxop_left = list(itertools.combinations(boxop_left,len(box_left)))
+        for box_op1 in range(len(boxop_left)):
+            if solved == True:
+                break
+            count = len(box_left)
+            grid_3 = deepcopy(grid_s1)
+            for box4 in range(len(box_left)):
+                for i in range(len(grid_3)):
+                    if grid_3[i][0] == boxop_left[box_op1][box4][0]:
+                        grid_3[i][1]= box_left[box4]
+                        count -= 1
+                        if count == 0:
+    
+                            l_start_points = read_bff(filename, 'sp')
+                            end_points = read_bff(filename, 'ep')
+                            grid_final = convert_box(grid_3)
+                            if (test_solution(grid_final,l_start_points, end_points, filename)):
+                                solved = True
+                                print(grid_3)
+                                break
 
     #     copy the grid solved
     #     assign B box
     #     testing
-
-
-
     #     grid_solved_final
-
-
     #     then final output
-
 
 if __name__ == "__main__":
 
-    solve('numbered_6.bff')
-    #a = convert_box(read_bff('showstopper_4_copy.bff', 'box'))
-    #print(a)
-    #sp = read_bff('showstopper_4_copy.bff', 'sp')
-    #print(sp)
-    # solve('showstopper_4.bff')
-    # a = convert_box('mad_7_test.bff')
-    # print(a)
-    # ep = read_bff('mad_7.bff', 'ep')
-    # print(ep)
-    # b = read_bff('mad_7.bff', 'box')
-    # print(b)
-    # print(find_gp1(b[1], 'mad_7.bff'))
-<<<<<<< HEAD
-    #print(first_line('showstopper_4.bff', 1))
-=======
-    # print(first_line('showstopper_4.bff', 1))
->>>>>>> 6d1a4cf2940d25fad10d6449d0cab8ec59f6ccea
-    # c = first_line('mad_7.bff', 1)
-    # print(c)
-    
+    solve('showstopper_4.bff')
+    solve('dark_1.bff')
+    solve('mad_1.bff')
+    solve('mad_4.bff')
+    solve('dark_1.bff')
+    solve('tiny_5.bff')
 
-
-    # for i in range(len(a)):
-    #     print(convert_grid(a[i]))
