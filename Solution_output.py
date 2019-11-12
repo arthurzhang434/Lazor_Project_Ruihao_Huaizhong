@@ -9,19 +9,22 @@ Created on Sun Nov 10 10:57:01 2019
 This file contains the function to visualize the output of the solution
 '''
 from PIL import Image
-
+'''
 solution0 = [[[1, 1], 'o'], [[3, 1], 'o'], [[5, 1], 'C'], [[7, 1], 'o'], 
              [[1, 3], 'o'], [[3, 3], 'o'], [[5, 3], 'o'], [[7, 3], 'A'], 
              [[1, 5], 'A'], [[3, 5], 'o'], [[5, 5], 'o'], [[7, 5], 'o'], 
              [[1, 7], 'o'], [[3, 7], 'o'], [[5, 7], 'o'], [[7, 7], 'o']]
+'''
+solution0 = [[[1, 1], 'B'], [[3, 1], 'A'], [[5, 1], 'o'],[[4,7],'B'], 
+ [[1, 3], 'o'], [[3, 3], 'o'], [[5, 3], 'A'],[[4,7],'B'],
+ [[1, 5], 'A'], [[3, 5], 'o'], [[5, 5], 'o'],[[4,7],'B']]
 
-
-colors ={'o':(255,255,255),
-         'x':(0,0,0),
-         'A':(236,157,157),
+colors ={'o':(148, 156, 165),
+         'x':(70, 71, 71),
+         'A':(203, 228, 255),
          'B':(0,0,0),
          'C':(176,174,174),
-         'gap':(255,1,1)
+         'gap':(255, 255, 255)
         }
 
 def set_colors(img, x0, y0, dim, gap, color):
@@ -37,9 +40,11 @@ def solution_output(solution0, dim=50, gap=5):
     solution2 = []
     x = 0
     for j in range(int(len(solution0)/4)):
-        for i in range(int(len(solution0)/4)):
+        for i in range(int(len(solution0)/3)):
             solution1.append(solution0[4*x + i][1])
+            print(solution1)
         solution2.append(solution1)
+        print(solution2)
         x = x + 1
         solution1 = []
     
