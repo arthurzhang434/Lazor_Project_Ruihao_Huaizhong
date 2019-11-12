@@ -744,11 +744,11 @@ def solve(filename):
     #     then final output
 
 if __name__ == "__main__":
-
-    solve('showstopper_4.bff')
-    solve('dark_1.bff')
-    solve('mad_1.bff')
-    solve('mad_4.bff')
-    solve('dark_1.bff')
-    solve('tiny_5.bff')
+    solve('yarn_5.bff')
+    # solve('showstopper_4.bff')
+    # solve('dark_1.bff')
+    # solve('mad_1.bff')
+    # solve('mad_4.bff')
+    # solve('dark_1.bff')
+    # solve('tiny_5.bff')
 
