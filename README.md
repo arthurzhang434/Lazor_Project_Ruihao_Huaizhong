@@ -1,6 +1,6 @@
 # Lazor_Project_Ruihao_Huaizhong
 # This is a solutions generator to the Lazor games.
-Group member: Ruihao Ni, Huaizhong Zhang<b>
+Group member: Ruihao Ni, Huaizhong Zhang<b/>
 The file Lazor Project.py could solve the "Lazor" game following these steps:<b>
 1) Read in the .bff file by changing the change the name of the file at the very end of the doce<b>
 2) Run the code<b>
