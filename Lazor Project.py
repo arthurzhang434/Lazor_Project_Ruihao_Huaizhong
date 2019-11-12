@@ -97,26 +97,26 @@ def read_bff(filename, select):
     the selector to choose which value will be returned
 
     **Return**
-    box_raw
+    box_raw: *list*
     [[o, o, o],
     [o, A, x],
     [B, o, x]]
 
-    box
+    box: *list*
     box with coordination
 
     size of the box
-    w, h
+    w, h: *tuple*
     how many boxes per line/column
 
-    number of A, B, C: 
+    number of A, B, C: *tuple*
     nA, nB, nC
 
-    start point
+    start point: *list*
     [[rx, ry], [vx, vy)] 
 
-    end point
-    (x,y)
+    end point: *list*
+    [x,y]
     '''
     fi = open(filename, 'r')
     bff = fi.read()
@@ -192,6 +192,17 @@ def read_bff(filename, select):
 
 def convert_box(box):
 '''
+    finished by Ruihao
+
+    **Parameters**
+    box: *list*
+    a list of the original box
+    [[cx,cy], gridtype]
+
+    **Returns**
+    grid point:*list*
+    [[gx, gy], [ox, oy], gridtype]
+
     convert the box to grid point with the type
     (orientation (ox, oy):
     up (0, -1) / down (0,1) / left (-1, 0) / right (1, 0)
@@ -200,8 +211,6 @@ def convert_box(box):
     A: reflect
     B: terminate the ray
     C: pass and reflect
-    convert [[cx,cy], gridtype] to
-    [[gx, gy], [ox, oy], gridtype]
 '''
     grid_point = []
 
@@ -220,9 +229,27 @@ def convert_box(box):
     return grid_point
 
 def convert_grid(grid):
-#     convert [[gx, gy], [ox, oy], gridtype]  to
-#     [[cx,cy], gridtype]
+    '''
+    finished by Ruihao
 
+    **Parameters**
+    grid point:*list*
+    [[gx, gy], [ox, oy], gridtype]
+    
+    **Returns**
+    box: *list*
+    a list of the original box
+    [[cx,cy], gridtype]
+    
+    convert the box to grid point with the type
+    (orientation (ox, oy):
+    up (0, -1) / down (0,1) / left (-1, 0) / right (1, 0)
+    (3) type: o/ A/ B/ C
+    o: pass the point
+    A: reflect
+    B: terminate the ray
+    C: pass and reflect
+'''
     if grid[1] == [-1, 0]:
         return [[grid[0][0] + 1, grid[0][1]], grid[2]]
     if grid[1] == [1, 0]:
@@ -235,10 +262,25 @@ def convert_grid(grid):
 # given a incident ray, find the grid point that face to the ray (can reflect)
 
 def find_gp1(filename, point):
-    # filename: in which picture
-    # point e.g. : [(2, 1), (1, 1)]
-    # grid point [[8, 9], [-1, 0], 'o']
-    # change w, h
+    '''
+    finished by Ruihao
+
+    **Parameters**
+    filename: *str*
+    The .bff file that contains all the Lazor information
+   
+    ray point: *list*
+    [[cx,cy],[vx, vy]]
+    position, direcction
+
+    **Returns**
+    grid point:*list*
+    [[gx, gy], [ox, oy], gridtype]
+    position, direction, type
+    
+    for a ray point, find the grid point(side of box)
+    that face the ray(can reflect the ray)
+    '''
     w, h = read_bff(filename, 'size')
     gp = (0, 0, 0)
 
@@ -259,11 +301,19 @@ def find_gp1(filename, point):
 def first_line(filename, n):
     '''
     Finished by Ruihao
+
+    **Parameters**
+    filename: *str*
+    The .bff file that contains all the Lazor information
+
+    n: *int*
+    select which of the ray
+    generate line for n line
     
+    use the initial condition to find the boxes on the line
+
     '''
-    # also need to add start point
-    # use the initial condition to find the boxes on the line
-    # n can be 1 or 2 generate line for first or second line
+
     start_point = read_bff(filename, 'sp')
     pline = start_point[n-1]
     # print (pline)
@@ -281,11 +331,10 @@ def first_line(filename, n):
         blockpath.append(convert_grid(i))
     return blockpath
 
-'''
-Finished by Huaizhong Zhang
-'''
 class Block():
     '''
+    Finished by Huaizhong Zhang
+
     This class object describes different types of blocks in the game
     and how do they affect the laser touching them
     'o' or 'x' are no blocks
@@ -580,6 +629,10 @@ def solve(filename):
     '''
     Finished by Ruihao
 
+    **Parameters**
+    filename: *str*
+    The .bff file that contains all the Lazor information
+
     some trial on brute force to solve the maze is found to be impossible when
     the overall block exceed 12, so we need some strategy when we try to put
     ABC block on the availabe position on o.
@@ -603,21 +656,22 @@ def solve(filename):
         Bl = ['B'] * nB
     if nC:
         Cl = ['C'] * nC
+    #  Al: AAAAA Bl: BBBBB    
     rbox_raw = Al + Cl
     solved = False
 
     if nA + nC == 0:
         solved = True
-        print('dark')        
-        # directly pass
+        # print('dark')        
+        # directly pass e.g. dark_1.bff
         boxop_left = obox
         grid_s1 = import_box
         box_left = Bl
 
         # save the following variables:
-        # rest block
-        # obox rest
-        # solved grid
+        # rest block yet to be put in
+        # obox rest ()
+        # solved grid(initial grid)
 
     else:
         rbox_tuple = list(set(itertools.permutations(''.join(rbox_raw))))
@@ -689,7 +743,7 @@ def solve(filename):
                             # print(grid_2)
                             l_start_points = read_bff(filename, 'sp')
                             end_points = read_bff(filename, 'ep')
-                            gridpoints_2 = convert_box(grid_2)
+                            gridpoints_2 = convert_box(grid_2)  #convert box to grid point
 
                             if (test_solution(gridpoints_2, l_start_points, end_points, filename)):
                                 solved = True
@@ -711,7 +765,7 @@ def solve(filename):
                                 # check whether all the point demanded have light passed through
                                 # record the grid
         # the following code can be used if there are two or
-        # more incident light and the box is big
+        # more incident light and the box is big.
         # elif len(read_bff(filename, 'sp')) == 2:
         #     line2 = first_line(filename, 2)
         #     if solved == False:#while
@@ -815,8 +869,14 @@ def solve(filename):
         #                                 print(box_left)
         #                                 grid_s1 = grid_2
         #                                 break
-
-    # if there are B block left, put them inside
+'''
+    if there are B block left, put them inside
+    copy the grid solved
+    assign B box
+    testing
+    grid_solved_final
+    then final output
+'''
     if box_left == []:
         grid_3 = grid_s1
         print(grid_3)
@@ -842,22 +902,16 @@ def solve(filename):
                             if (test_solution(grid_final,l_start_points, end_points, filename)):
                                 solved = True
                                 print(grid_3)
-                                solution_output(grid_3,filename, dim=50, gap=5)
-                                
+                                solution_output(grid_3,filename, dim=50, gap=5)                           
                                 break
-
-    #     copy the grid solved
-    #     assign B box
-    #     testing
-    #     grid_solved_final
-    #     then final output
-
 if __name__ == "__main__":
-    # solve('yarn_5.bff')
-    # solve('showstopper_4.bff')
-    # solve('dark_1.bff')
-    solve('mad_1.bff')
-    # solve('mad_4.bff')
-    # solve('dark_1.bff')
-    # solve('tiny_5.bff')
-    # solve('tiny_5.bff')
+    # solve('yarn_5.bff')  # takes long time to solve
+    # solve('showstopper_4.bff')  # solved
+    # solve('dark_1.bff')  # solved
+    solve('mad_1.bff')  # solved
+    # solve('mad_4.bff')  # solved
+    # solve('tiny_5.bff')  # solved
+    # solve('numbered_6.bff')  # solved
+    # solve('mad_7.bff')  # takes long time to solve
+
+
